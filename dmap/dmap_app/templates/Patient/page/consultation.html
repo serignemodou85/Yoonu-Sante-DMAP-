@@ -1,0 +1,106 @@
+{% load static %}
+{% include "Patient/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+        {% include "Patient/section/header.html" %}
+        {% include "Patient/section/menugauche.html" %}
+
+        <!-- Contenu -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Consultation
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                    <li class="active">Consultation</li>
+                </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Historique des consultations</h3>
+                            </div>
+
+                            <div class="box-body">
+                                <table class="table table-bordered table-striped table-section" id="section-structure">
+                                    <thead>
+                                        <tr>
+                                            <th>Date Consultation</th>
+                                            <th>Température (°C)</th>
+                                            <th>Taille (cm)</th>
+                                            <th>Poids (kg)</th>
+                                            <th>Motif</th>
+                                            <th>Résultat</th>
+                                            <th>Consulté par</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for consultation in consultations %}
+                                            <tr>  
+                                                <td>{{ consultation.date_consultation }}</td>
+                                                <td>{{ consultation.temperature }}</td>
+                                                <td>{{ consultation.taille }}</td>
+                                                <td>{{ consultation.poids }}</td>
+                                                <td>{{ consultation.motif }}</td>
+                                                <td>{{ consultation.resultat }}</td>
+                                                <td>Dr {{ consultation.medecin.prenom }} {{ consultation.medecin.nom }}</td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td colspan="7" class="text-center">Aucune consultation trouvée</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                      {% if consultations.has_previous %}
+                                        <li class="page-item">
+                                          <a class="page-link" href="?page=1" aria-label="Première">&laquo;&laquo;</a>
+                                        </li>
+                                        <li class="page-item">
+                                          <a class="page-link" href="?page={{ consultations.previous_page_number }}" aria-label="Précédent">&laquo;</a>
+                                        </li>
+                                      {% else %}
+                                        <li class="page-item disabled"><span class="page-link disabled">&laquo;&laquo;</span></li>
+                                        <li class="page-item disabled"><span class="page-link disabled">&laquo;</span></li>
+                                      {% endif %}
+                                  
+                                      <li class="page-item current">
+                                        <span class="page-link current">
+                                          Page {{ consultations.number }} sur {{ consultations.paginator.num_pages }}
+                                        </span>
+                                      </li>
+                                  
+                                      {% if consultations.has_next %}
+                                        <li class="page-item">
+                                          <a class="page-link" href="?page={{ consultations.next_page_number }}" aria-label="Suivant">&raquo;</a>
+                                        </li>
+                                        <li class="page-item">
+                                          <a class="page-link" href="?page={{ consultations.paginator.num_pages }}" aria-label="Dernière">&raquo;&raquo;</a>
+                                        </li>
+                                      {% else %}
+                                        <li class="page-item disabled"><span class="page-link disabled">&raquo;</span></li>
+                                        <li class="page-item disabled"><span class="page-link disabled">&raquo;&raquo;</span></li>
+                                      {% endif %}
+                                    </ul>
+                                </nav>     
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </section>
+        </div>
+        <!-- End Contenu -->
+
+        {% include "Patient/section/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Patient/section/script.html" %}
+</body>
+</html>

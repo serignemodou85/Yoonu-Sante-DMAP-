@@ -1,0 +1,84 @@
+{% load static %}
+{% include "vitrine/section/head.html" %}
+
+<body class="index-page">
+  {% include "vitrine/section/header.html" %}
+{% if messages %}
+  {% for message in messages %}
+    <script>
+      Swal.fire({
+        title: '{{ message.tags }}',
+        text: '{{ message }}',
+        icon: '{{ message.tags }}',
+        confirmButtonText: 'OK'
+      });
+    </script>
+  {% endfor %}
+{% endif %}
+
+
+ 
+
+  <main class="main">
+
+    <!-- ACCUEIL -->
+    {% include "vitrine/section/accueil.html" %}
+    <!-- END ACCUEIL -->
+
+    <!-- A PROPOS -->
+    {% include "vitrine/section/about.html" %}
+    <!-- END A PROPOS -->
+
+    <!-- A PRESENTATION -->
+    {% include "vitrine/section/presentation.html" %}
+    <!-- END PRESENTATION -->
+
+    <!-- SERVICE -->
+    {% include "vitrine/section/service.html" %}
+    <!-- END SERVICE -->
+
+
+    <!-- SERVICE -->
+    {% include "vitrine/section/servicealt.html" %}
+    <!-- END SERVICE -->
+
+    <!-- SERVICE -->
+    {% include "vitrine/section/prix.html" %}
+    <!-- END SERVICE -->
+
+    <!-- TEMOIGNAGE -->
+    {% include "vitrine/section/temoignage.html" %}
+    <!-- END TEMOIGNAGE-->
+
+    <!-- CONTACT -->
+    {% include "vitrine/section/contact.html" %}
+    <!-- END CONTACT -->
+
+  </main>
+
+   <!-- FOOTER -->
+    {% include "vitrine/section/footer.html" %}
+    <!-- END FOOTER -->
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vitrine/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vitrine/assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'vitrine/assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vitrine/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'vitrine/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'vitrine/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'vitrine/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+
+  <!-- Main JS File -->
+  <script src="{% static 'vitrine/assets/js/main.js' %}"></script>
+
+</body>
+
+</html>

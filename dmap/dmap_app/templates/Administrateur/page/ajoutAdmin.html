@@ -1,0 +1,123 @@
+{% load static %}
+{% include "Administrateur/section/head.html" %}
+<body class="skin-blue">
+<div class="wrapper"> 
+    {% include "Administrateur/section/header.html" %}
+    {% include "Administrateur/section/menugauche.html" %}
+
+    <!-- Contenu -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Ajouter un Administrateur</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                <li><a href="#"><i class="fa fa-users"></i> Ajouter un Administrateur</a></li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Ajouter un Administrateur</h3>
+                        </div>
+                        
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <script>
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Succès',
+                                            text: '{{ message }}',
+                                            timer: 3000,
+                                            showConfirmButton: false
+                                        });
+                                    </script>
+                                {% endfor %}
+                            {% endif %}
+                        <div class="box-body">
+                            <form method="POST" enctype="multipart/form-data" action="{{'ajouter_un_admin'}}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <!-- Partie Gauche -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nom">Nom</label>
+                                            <input type="text" name="nom" class="form-control" placeholder="Entrez le nom" required>
+                                            <p class="text-danger"></p>
+                                        </div>
+                            
+                                        <div class="form-group">
+                                            <label for="prenom">Prénom</label>
+                                            <input type="text" name="prenom" class="form-control" placeholder="Entrez le prénom" required>
+                                            <p class="text-danger"></p>
+                                        </div>
+                            
+                                        <div class="form-group">
+                                            <label for="sexe">Sexe</label>
+                                            <select name="sexe" class="form-control" required>
+                                                <option value="">-- Sélectionnez --</option>
+                                                <option value="M">Masculin</option>
+                                                <option value="F">Féminin</option>
+                                            </select>
+                                            <p class="text-danger"></p>
+                                        </div>
+                            
+                                        <div class="form-group">
+                                            <label for="adresse">Adresse</label>
+                                            <input type="text" name="adresse" class="form-control" placeholder="Entrez l'adresse" required>
+                                            <p class="text-danger"></p>
+                                        </div>
+                            
+                                    </div>
+                            
+                                    <!-- Partie Centre -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="telephone">Téléphone</label>
+                                            <input type="text" name="telephone" class="form-control" placeholder="Entrez le numéro" required>
+                                            <p class="text-danger"></p>
+                                        </div>
+                            
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" name="email" class="form-control" placeholder="Entrez l'email" required>
+                                            <p class="text-danger"></p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="image">Photo</label>
+                                            <input type="file" name="image" class="form-control-file">
+                                            <p class="text-danger"></p>
+                                        </div>
+                            
+                                        <div class="form-group mt-4">
+                                            <button type="submit" class="btn btn-primary btn-block">
+                                                <i class="fa fa-save"></i> Enregistrer
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>                            
+                            
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section>
+    </div>
+    <!-- End Contenu -->
+
+    <!-- JS de filtrage -->
+
+    {% include "Administrateur/section/footer.html" %}
+</div><!-- ./wrapper -->
+{% include "Administrateur/section/script.html" %}
+
+
+    
+    
+    
+
+</body>
+</html>

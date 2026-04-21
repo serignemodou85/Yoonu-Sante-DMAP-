@@ -1,0 +1,48 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 15px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .pagination li {
+    margin: 0 6px;
+  }
+  
+  .page-link {
+    display: block;
+    padding: 8px 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid #007bff;
+    color: #007bff;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  /* Hover sur liens actifs */
+  .page-link:hover:not(.disabled) {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  /* Page courante */
+  .page-item.current .page-link {
+    background-color: #007bff;
+    color: white;
+    cursor: default;
+    border-color: #0056b3;
+  }
+  
+  /* Liens désactivés */
+  .page-link.disabled {
+    color: #aaa;
+    border-color: #ccc;
+    cursor: not-allowed;
+    background-color: #f9f9f9;
+    pointer-events: none;
+  }
+  

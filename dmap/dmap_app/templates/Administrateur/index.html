@@ -1,0 +1,122 @@
+{% load static %}
+{% include "Administrateur/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+      {% include "Administrateur/section/header.html" %}
+      {% include "Administrateur/section/menugauche.html" %}
+
+      <!-- CONTENUE -->
+      <div class="content-wrapper">
+        <section class="content-header">
+          <h1>
+            Accueil
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'administrateur_page'%}"><i class="fa fa-dashboard"></i>Acceuil</a></li>
+          </ol>
+        </section>
+        <section class="content">
+          <div class="row">
+            <!-- Nombre de Médecins -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3>{{ nombre_medecin }}</h3>
+                  <p>Médecins</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-user-md"></i>
+                </div>
+              </div>
+            </div>
+        
+            <!--Nombre de Patients -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3>{{ nombre_patient }}</h3>
+                  <p>Patients</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-users"></i>
+                </div>
+              </div>
+            </div>
+        
+            <!--Nombre de Structures -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>{{ nombre_structure }}</h3>
+                  <p>Structures de Sante</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-hospital-o"></i>
+                </div>
+              </div>
+            </div>
+
+
+          <!--Nombre de Admin -->
+          <div class="col-lg-4 col-xs-12">
+            <div class="small-box bg-yellow">
+              <div class="inner">
+                <h3>{{ nombre_admin }}</h3>
+                <p>Admins</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-user"></i>
+              </div>
+            </div>
+          </div>
+
+          <!--Nombre de Demande Carte -->
+          <div class="col-lg-4 col-xs-12">
+            <div class="small-box bg-green">
+              <div class="inner">
+                <h3>{{ nombre_demande }}</h3>
+                <p>Demande Carte Patient</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-credit-card"></i>
+              </div>
+            </div>
+          </div>
+          <!--Nombre de Dossier Medical -->
+          <div class="col-lg-4 col-xs-12">
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3>{{ nombre_dossier }}</h3>
+                <p>Dossier Medical</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-folder-open"></i>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="col-lg-12 col-xs-12">
+            <!-- Utilisation de Flexbox pour aligner les deux graphiques côte à côte -->
+            <div class="row">
+              <!-- Graphique Structures Validées vs Refusées -->
+              <div class="col-lg-6 col-xs-12">
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Graphique des Structures Validées vs Refusées</h3>
+                  </div>
+                  <div class="box-body">
+                    {{ graph_div|safe }}
+                  </div>
+                </div>
+              </div>
+          </div>          
+        </section>
+      </div>
+      <!--End Contenue -->
+
+      {% include "Administrateur/section/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Administrateur/section/script.html" %}
+
+  </body>
+</html>

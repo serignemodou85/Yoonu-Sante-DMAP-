@@ -1,0 +1,76 @@
+{% load static %}
+{% include "Patient/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+        {% include "Patient/section/header.html" %}
+        {% include "Patient/section/menugauche.html" %}
+
+        <!-- Contenue -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    QR Code
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                    <li><a href="#"><i class="fa fa-dashboard"></i>QR Code</a></li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">QR Code</h3>
+                            </div>
+                                                           
+                            <div class="box-body">
+                                <!-- Formulaire pour générer l'identifiant -->
+                                <div class="text-center" style="margin-bottom: 20px;">
+                                    <form method="post" action="{% url 'generer_identifiant' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-warning">
+                                            <i class="fa fa-random"></i> Générer Identifiant
+                                        </button>
+                                    </form>
+                                    {% if patient and patient.identifiant %}
+                                        <div class="identifiant-display" style="margin-top: 15px; font-size: 18px;">
+                                            <strong>Identifiant :</strong> {{ patient.identifiant }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- QR Code Section -->
+                                <div class="qr-code-container">
+                                    <div class="qr-code-box">
+                                        <h4 class="qr-code-title">Mon QR Code Médical</h4>
+                                        <img src="{{ qr_code }}" alt="QR Code" class="qr-code-img">
+                                        <p class="qr-code-description">
+                                            Scannez ce code avec l'application médecin pour ouvrir votre <strong>dossier médical</strong>.
+                                        </p>
+                                        <p class="qr-code-note">QR Code renouvelé chaque minute pour votre sécurité.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Script de rafraîchissement -->
+                                <script>
+                                    setInterval(() => {
+                                        location.reload(); // Recharge toutes les 60 secondes
+                                    }, 60000);
+                                </script>
+                            </div>
+                            <!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </section>
+        </div>
+        <!-- End Contenue -->
+
+        {% include "Patient/section/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Patient/section/script.html" %}
+</body>
+</html>
+

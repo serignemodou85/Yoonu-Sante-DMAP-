@@ -1,0 +1,892 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOONU SANTE - Connexion</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --health-blue: #1a6fdf;
+            --health-green: #2ecc71;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), 
+                              url('https://images.unsplash.com/photo-1579684453423-f84349ef60b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: auto;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        .login-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, var(--health-blue), #3a86ff);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .login-header h3 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .login-header i {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .login-header p {
+            opacity: 0.9;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .login-body {
+            padding: 30px;
+        }
+        
+        .form-control {
+            height: 50px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding-left: 15px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.2);
+            border-color: var(--health-blue);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, var(--health-blue), #3a86ff);
+            border: none;
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3);
+            background: linear-gradient(135deg, #1557c0, #2f74e6);
+        }
+        
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .links a {
+            color: var(--health-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+        
+        .links a:hover {
+            color: #1557c0;
+            text-decoration: underline;
+        }
+        
+        .divider {
+            position: relative;
+            margin: 25px 0;
+            text-align: center;
+            color: #95a5a6;
+        }
+        
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #eee;
+            z-index: -1;
+        }
+        
+        .divider span {
+            background-color: white;
+            padding: 0 15px;
+            position: relative;
+            font-size: 0.85rem;
+        }
+        
+        .btn-register {
+            background-color: white;
+            border: 1px solid var(--health-blue);
+            color: var(--health-blue);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .btn-register:hover {
+            background-color: var(--health-blue);
+            color: white;
+        }
+        
+        .floating-label {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .floating-label label {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #95a5a6;
+            transition: all 0.3s;
+            pointer-events: none;
+            background-color: white;
+            padding: 0 5px;
+            font-size: 0.9rem;
+        }
+        
+        .floating-label input:focus + label,
+        .floating-label input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 10px;
+            font-size: 0.75rem;
+            color: var(--health-blue);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            cursor: pointer;
+            color: #95a5a6;
+            transition: color 0.3s;
+        }
+        
+        .password-toggle:hover {
+            color: var(--health-blue);
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .is-valid {
+            border-color: #28a745 !important;
+        }
+        
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--health-blue), #3a86ff);
+            color: white;
+            border-bottom: none;
+            padding: 20px 25px;
+        }
+        
+        .modal-header .btn-close {
+            filter: invert(1);
+            opacity: 0.8;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .modal-footer {
+            border-top: none;
+            padding: 20px 25px;
+            background-color: #f9f9f9;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+        
+        /* Button Styles */
+        .btn-health {
+            background-color: var(--health-blue);
+            border-color: var(--health-blue);
+            color: white;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-health:hover {
+            background-color: #1557c0;
+            border-color: #1557c0;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(26, 111, 223, 0.2);
+        }
+        
+        .btn-outline-health {
+            border: 1px solid var(--health-blue);
+            color: var(--health-blue);
+            background-color: transparent;
+        }
+        
+        .btn-outline-health:hover {
+            background-color: var(--health-blue);
+            color: white;
+        }
+        
+        /* Step Indicator */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 10px;
+            position: relative;
+        }
+        
+        .step.active {
+            background-color: var(--health-blue);
+            color: white;
+        }
+        
+        .step.completed {
+            background-color: var(--health-green);
+            color: white;
+        }
+        
+        .step:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background-color: #e0e0e0;
+            left: 100%;
+        }
+        
+        .step.active:not(:last-child)::after,
+        .step.completed:not(:last-child)::after {
+            background-color: var(--health-blue);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .login-container {
+                padding: 0 15px;
+            }
+            
+            .login-header {
+                padding: 25px;
+            }
+            
+            .login-body {
+                padding: 25px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+        }
+        
+        /* Form Steps */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        /* Alert Styles */
+        .alert {
+            border-radius: 8px;
+            padding: 12px 15px;
+        }
+        
+        /* Custom Checkbox */
+        .form-check-input:checked {
+            background-color: var(--health-blue);
+            border-color: var(--health-blue);
+        }
+        
+        /* Fade Out Animation */
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                height: 0;
+                margin: 0;
+                padding: 0;
+                display: none;
+            }
+        }
+    </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <i class="fas fa-hospital-user"></i>
+                    <h3>YOONU SANTE</h3>
+                    <p>Dossiers Médical Automatise et Partage</p>
+                </div>
+                <div class="login-body">
+                    {% if erreur %}
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            {{ erreur }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+
+                    {% for messages in message%}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            {% if messages %}
+                                {% for message in messages %}
+                                    Swal.fire({
+                                        icon: '{{ message.tags|default:"info" }}',
+                                        title: '{{ message.tags|default:"Message"|title }}',
+                                        text: '{{ message|escapejs }}',
+                                        timer: 3000,
+                                        width: 400,
+                                        showConfirmButton: false,
+                                        background: 'white',
+                                        backdrop: 'rgba(0,0,0,0.1)'
+                                    });
+                                {% endfor %}
+                            {% endif %}
+                        });
+                    </script>
+                    <form method="POST" action="{% url 'store' %}" id="form" name="form">
+                        {% csrf_token %}
+
+                        <div class="floating-label">
+                            <input type="email" name="email" class="form-control" id="email" placeholder=" " required>
+                            <label for="email">Adresse Email</label><br>
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                        
+                        <div class="floating-label">
+                            <input type="password" name="password" class="form-control" id="password" placeholder=" " required>
+                            <label for="password">Mot de passe</label>
+                            <i class="fas fa-eye password-toggle" id="togglePassword"></i><br>
+                            <span class="error-message" id="passwordError"></span>
+                        </div>
+
+                        {% if error_message %}
+                            <div class="alert alert-danger alert-dismissible fade show mb-3" id="error">
+                                {{ error_message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+                        
+                        <button type="submit" class="btn btn-login mb-3" id="submitBtn" disabled>
+                            <i class="fas fa-sign-in-alt me-2"></i> Se connecter
+                        </button>
+                        
+                        <div class="links">
+                            <a href="{% url 'password_oublie_view' %}" id="forgotPassword">
+                                <i class="fas fa-key me-1"></i> Mot de passe oublié ?
+                            </a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#accountTypeModal">
+                                <i class="fas fa-user-plus me-1"></i> S'inscrire
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Type Modal -->
+    <div class="modal fade" id="accountTypeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Choisissez le type de compte</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <button class="btn btn-health w-100 py-3" data-bs-toggle="modal" data-bs-target="#registrationModal" data-bs-dismiss="modal">
+                                <i class="fas fa-hospital me-2"></i> Structure de santé
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-health w-100 py-3" data-bs-toggle="modal" data-bs-target="#patientRegistrationModal" data-bs-dismiss="modal">
+                                <i class="fas fa-user-injured me-2"></i> Patient
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <p class="mb-0 text-muted">Vous avez déjà un compte? <a href="#" data-bs-dismiss="modal" onclick="document.getElementById('email').focus()">Connectez-vous</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Registration Modal -->
+    <div class="modal fade" id="patientRegistrationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{% url 'inscription_patient' %}" enctype="multipart/form-data" id="patientForm">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-user-plus me-2"></i> Inscription Patient
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" name="nom" class="form-control" id="patientNom" placeholder="Nom" required>
+                                    <label for="patientNom">Nom</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" name="prenom" class="form-control" id="patientPrenom" placeholder="Prénom" required>
+                                    <label for="patientPrenom">Prénom</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select name="sexe" class="form-select" id="patientSexe" required>
+                                        <option value="">Sélectionnez</option>
+                                        <option value="H">Homme</option>
+                                        <option value="F">Femme</option>
+                                    </select>
+                                    <label for="patientSexe">Sexe</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="date" name="date_naissance" class="form-control" id="patientDateNaissance" required>
+                                    <label for="patientDateNaissance">Date de naissance</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" name="adresse" class="form-control" id="patientAdresse" placeholder="Adresse" required>
+                                    <label for="patientAdresse">Adresse</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="tel" name="telephone" class="form-control" id="patientTelephone" placeholder="Téléphone" required>
+                                    <label for="patientTelephone">Téléphone</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" name="email" class="form-control" id="patientEmail" placeholder="Email" required>
+                                    <label for="patientEmail">Email</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="password" name="password" class="form-control" id="patientPassword" placeholder="Mot de passe" required>
+                                    <label for="patientPassword">Mot de passe</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="password" name="confirm_password" class="form-control" id="patientConfirmPassword" placeholder="Confirmer mot de passe" required>
+                                    <label for="patientConfirmPassword">Confirmer mot de passe</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="patientImage" class="form-label">Photo de profil (optionnelle)</label>
+                                    <input type="file" name="image" class="form-control" id="patientImage" accept="image/*">
+                                    <small class="text-muted">Formats acceptés: JPG, PNG (max 2MB)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-health">
+                            <i class="fas fa-user-plus me-1"></i> S'inscrire
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Health Structure Registration Modal -->
+    <div class="modal fade" id="registrationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{% url 'inscription_structure' %}" enctype="multipart/form-data" id="registrationForm">
+                    {% csrf_token %}
+                    
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-hospital me-2"></i> Inscription Structure de Santé
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <!-- Step Indicator -->
+                        <div class="step-indicator mb-4">
+                            <div class="step active" id="step1">1</div>
+                            <div class="step" id="step2">2</div>
+                        </div>
+                        
+                        <!-- Étape 1 -->
+                        <div class="form-step active" id="step1Form">
+                            <div class="mb-3 form-floating">
+                                <input type="text" class="form-control" name="nom" id="nom" placeholder="Nom de la structure" required>
+                                <label for="nom">Nom de la structure</label>
+                                <span class="error-message" id="nomError"></span>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="structureType" id="structureType" required>
+                                    <option value="">Sélectionnez</option>
+                                    <option value="Hôpital">Hôpital</option>
+                                    <option value="Clinique">Clinique</option>
+                                    <option value="Cabinet médical">Cabinet médical</option>
+                                    <option value="Laboratoire">Laboratoire</option>
+                                    <option value="Pharmacie">Pharmacie</option>
+                                </select>
+                                <label for="structureType">Type de structure</label>
+                                <span class="error-message" id="structureTypeError"></span>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <input type="email" class="form-control" name="email" id="regEmail" placeholder="Email" required>
+                                <label for="regEmail">Email</label>
+                                <span class="error-message" id="emailError"></span>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <input type="password" class="form-control" name="password" id="regPassword" placeholder="Mot de passe" required>
+                                <label for="regPassword">Mot de passe</label>
+                                <span class="error-message" id="passwordError"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Étape 2 -->
+                        <div class="form-step" id="step2Form">
+                            <div class="mb-3 form-floating">
+                                <input type="text" class="form-control" name="adresse" id="adresse" placeholder="Adresse" required>
+                                <label for="adresse">Adresse</label>
+                                <span class="error-message" id="adresseError"></span>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-6 form-floating">
+                                    <input type="text" class="form-control" name="ville" id="ville" placeholder="Ville" required>
+                                    <label for="ville">Ville</label>
+                                    <span class="error-message" id="villeError"></span>
+                                </div>
+                                <div class="col-md-6 form-floating">
+                                    <input type="text" class="form-control" name="region" id="region" placeholder="Région" required>
+                                    <label for="region">Région</label>
+                                    <span class="error-message" id="regionError"></span>
+                                </div>
+                            </div>
+                            <div class="mb-3 form-floating">
+                                <input type="tel" class="form-control" name="telephone" id="telephone" placeholder="Téléphone" required>
+                                <label for="telephone">Téléphone</label>
+                                <span class="error-message" id="telephoneError"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="structureImage" class="form-label">Logo de la structure (optionnel)</label>
+                                <input type="file" name="image" class="form-control" id="structureImage" accept="image/*">
+                                <small class="text-muted">Formats acceptés: JPG, PNG (max 2MB)</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">
+                            <i class="fas fa-arrow-left me-1"></i> Précédent
+                        </button>
+                        <button type="button" class="btn btn-health" id="nextBtn">
+                            Suivant <i class="fas fa-arrow-right ms-1"></i>
+                        </button>
+                        <button type="submit" class="btn btn-success" id="submitBtnForm" style="display: none;">
+                            <i class="fas fa-check me-1"></i> S'inscrire
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Connexion Form Validation
+            const emailInput = document.getElementById("email");
+            const passwordInput = document.getElementById("password");
+            const form = document.querySelector("form");
+            const submitBtn = document.getElementById("submitBtn");
+            const emailError = document.getElementById("emailError");
+            const passwordError = document.getElementById("passwordError");
+            
+            let isEmailValid = false;
+            let isPasswordValid = false;
+            
+            function showError(input, errorElement, message, isValid) {
+                if (message) {
+                    errorElement.textContent = message;
+                    input.classList.add("is-invalid");
+                    input.classList.remove("is-valid");
+                } else {
+                    errorElement.textContent = "";
+                    input.classList.remove("is-invalid");
+                    input.classList.add("is-valid");
+                }
+            }
+            
+            emailInput.addEventListener("input", () => {
+                const email = emailInput.value.trim();
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (email === "") {
+                    isEmailValid = false;
+                    showError(emailInput, emailError, "L'email est obligatoire.", false);
+                } else if (!emailPattern.test(email)) {
+                    isEmailValid = false;
+                    showError(emailInput, emailError, "Veuillez entrer un email valide.", false);
+                } else {
+                    isEmailValid = true;
+                    showError(emailInput, emailError, "", true);
+                }
+                checkFormValidity();
+            });
+
+            passwordInput.addEventListener("input", () => {
+                const password = passwordInput.value.trim();
+
+                if (password === "") {
+                    isPasswordValid = false;
+                    showError(passwordInput, passwordError, "Le mot de passe est obligatoire.", false);
+                } else if (password.length < 8) {
+                    isPasswordValid = false;
+                    showError(passwordInput, passwordError, "Le mot de passe doit contenir au moins 8 caractères.", false);
+                } else {
+                    isPasswordValid = true;
+                    showError(passwordInput, passwordError, "", true);
+                }
+                checkFormValidity();
+            });
+            
+            function checkFormValidity() {
+                submitBtn.disabled = !(isEmailValid && isPasswordValid);
+            }
+            
+            form.addEventListener("reset", () => {
+                isEmailValid = isPasswordValid = false;
+                submitBtn.disabled = true;
+                emailError.textContent = "";
+                passwordError.textContent = "";
+                emailInput.classList.remove("is-valid", "is-invalid");
+                passwordInput.classList.remove("is-valid", "is-invalid");
+            });
+            
+            // Password toggle
+            const togglePassword = document.querySelector('#togglePassword');
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // Form Steps Logic
+            let currentStep = 0;
+            const steps = document.querySelectorAll('.form-step');
+            const stepIndicators = document.querySelectorAll('.step');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtnForm = document.getElementById('submitBtnForm');
+            
+            function showStep(n) {
+                steps.forEach((step, index) => {
+                    step.classList.remove('active');
+                    if (index === n) step.classList.add('active');
+                });
+                
+                stepIndicators.forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index === n) step.classList.add('active');
+                    if (index < n) step.classList.add('completed');
+                });
+                
+                prevBtn.style.display = n === 0 ? 'none' : 'inline-block';
+                nextBtn.style.display = n === steps.length - 1 ? 'none' : 'inline-block';
+                submitBtnForm.style.display = n === steps.length - 1 ? 'inline-block' : 'none';
+                
+                validateStep();
+            }
+            
+            function nextPrev(n) {
+                const inputs = steps[currentStep].querySelectorAll('input, select');
+                let allValid = true;
+                
+                for (let input of inputs) {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        allValid = false;
+                    }
+                }
+                
+                if (!allValid) return;
+                
+                currentStep += n;
+                if (currentStep >= steps.length) {
+                    return;
+                }
+                showStep(currentStep);
+            }
+            
+            function validateStep() {
+                const inputs = steps[currentStep].querySelectorAll('input, select');
+                let allValid = true;
+                
+                for (let input of inputs) {
+                    if (!input.checkValidity()) {
+                        allValid = false;
+                        break;
+                    }
+                }
+                
+                nextBtn.disabled = !allValid;
+            }
+            
+            // Initialize
+            showStep(currentStep);
+            
+            // Event Listeners
+            prevBtn.addEventListener('click', () => nextPrev(-1));
+            nextBtn.addEventListener('click', () => nextPrev(1));
+            
+            document.querySelectorAll('#registrationForm input, #registrationForm select').forEach(input => {
+                input.addEventListener('input', validateStep);
+            });
+            
+            // Error message fade out
+            const errorElement = document.getElementById('error');
+            if (errorElement) {
+                setTimeout(function() {
+                    errorElement.classList.add('fade-out');
+                }, 7000);
+            }
+            
+            // Initialize modals
+            const accountTypeModal = new bootstrap.Modal(document.getElementById('accountTypeModal'));
+            const patientModal = new bootstrap.Modal(document.getElementById('patientRegistrationModal'));
+            const structureModal = new bootstrap.Modal(document.getElementById('registrationModal'));
+            
+            // Password match validation for patient form
+            const patientPassword = document.getElementById('patientPassword');
+            const patientConfirmPassword = document.getElementById('patientConfirmPassword');
+            
+            function validatePatientPassword() {
+                if (patientPassword.value !== patientConfirmPassword.value) {
+                    patientConfirmPassword.setCustomValidity("Les mots de passe ne correspondent pas");
+                } else {
+                    patientConfirmPassword.setCustomValidity("");
+                }
+            }
+            
+            patientPassword.addEventListener('change', validatePatientPassword);
+            patientConfirmPassword.addEventListener('keyup', validatePatientPassword);
+        });
+    </script>
+</body>
+</html>

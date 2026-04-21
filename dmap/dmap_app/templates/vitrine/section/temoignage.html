@@ -1,0 +1,114 @@
+{% load static %}
+<section id="testimonials" class="testimonials section">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Témoignages</h2>
+    <p>Vos retours nous motivent à toujours faire mieux !</p>
+    <div class="text-end">
+      <!-- Bouton Témoigner -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#temoignageModal">
+        Témoigner
+      </button>
+    </div>
+  </div>
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="testimonials-slider swiper init-swiper">
+      <script type="application/json" class="swiper-config">
+        {
+          "loop": true,
+          "speed": 800,
+          "autoplay": { "delay": 5000 },
+          "slidesPerView": 1,
+          "spaceBetween": 30,
+          "pagination": {
+            "el": ".swiper-pagination",
+            "type": "bullets",
+            "clickable": true
+          },
+          "breakpoints": {
+            "768": { "slidesPerView": 2 },
+            "1200": { "slidesPerView": 3 }
+          }
+        }
+      </script>
+      <div class="swiper-wrapper">
+        {% for temoin in temoins %}
+          {% if temoin.affichage %}
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>
+                  <i class="bi bi-quote quote-icon"></i>
+                  {{ temoin.description }}
+                </p>
+              </div>
+              <div class="testimonial-profile">
+                <div class="rating">
+                  {% for i in "12345" %}
+                    <i class="bi {% if forloop.counter <= temoin.etoiles %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                  {% endfor %}
+                </div>
+                <div class="profile-info">
+                  <img src="{{ temoin.photo.url }}" alt="{{ temoin.nom }}">
+                  <div>
+                    <h3>{{ temoin.nom }}</h3>
+                    <h4>{{ temoin.fonction }}</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="temoignageModal" tabindex="-1" aria-labelledby="temoignageModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" enctype="multipart/form-data" action="{% url 'ajouter_temoin' %}">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="temoignageModalLabel">Laisser un témoignage</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nom" class="form-label">Nom</label>
+            <input type="text" class="form-control" name="nom" required>
+          </div>
+          <div class="mb-3">
+            <label for="fonction" class="form-label">Fonction</label>
+            <input type="text" class="form-control" name="fonction" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Témoignage</label>
+            <textarea class="form-control" name="description" rows="4" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="photo" class="form-label">Photo</label>
+            <input type="file" class="form-control" name="photo" required>
+          </div>
+          <div class="mb-3">
+            <label for="etoiles" class="form-label">Note</label>
+            <select class="form-select" name="etoiles" required>
+              {% for i in "12345" %}
+              <option value="{{ forloop.counter }}">{{ forloop.counter }} étoile(s)</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Envoyer</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

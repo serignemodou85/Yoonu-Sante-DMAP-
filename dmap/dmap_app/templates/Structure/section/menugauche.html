@@ -1,0 +1,58 @@
+{% load static %}
+<aside class="main-sidebar">
+  <section class="sidebar">
+    <!-- Panneau utilisateur -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        {% if image %}
+          <img src="{{ image }}" alt="Admin" class="rounded-circle" width="150">
+          {% else %}
+            <img src="{% static 'img/photo-indisponible.webp' %}" alt="Admin par défaut" class="rounded-circle" width="150">
+          {% endif %}
+      </div>
+      <div class="pull-left info">
+        <p>{{ nom|default:"Aucun nom" }}</p>
+        <a href="#"><i class="fa fa-circle text-success"></i> En Ligne</a>
+      </div>
+    </div>
+
+    <!-- Menu latéral -->
+    <ul class="sidebar-menu">
+      <li class="header">MENU STRUCTURE</li>
+
+      <li class="{% if request.path == '/structure/' %}active{% endif %}">
+        <a href="{% url 'structure' %}">
+          <i class="fa fa-home"></i> <span>Accueil</span>
+        </a>
+      </li>
+
+      <li class="{% if request.path == '/listemedecin/' %}active{% endif %}">
+        <a href="{% url 'listeMedecin' %}">
+          <i class="fa fa-user-md"></i> <span>Gérer les Médecins</span>
+        </a>
+      </li>
+      <li class="{% if request.path == '/notification_structure/' %}active{% endif %}">
+        <a href="{% url 'notification_structure' %}">
+          <i class="fa fa-bell"></i> <span>Notifications</span>
+        </a>
+      </li>
+
+      <li class="{% if request.path == '/profil_structure/' %}active{% endif %}">
+        <a href="{% url 'profil_structure' %}">
+          <i class="fa fa-user"></i> <span>Gérer Profil</span>
+        </a>
+      </li>
+      <li class="{% if request.path == '/alerte_sante/' %}active{% endif %}">
+        <a href="{% url 'alerte_sante' %}">
+          <i class="fa fa-exclamation-triangle"></i> <span>Alerte Sanitaire</span>
+        </a>
+      </li>
+      <li class="{% if request.path == '/logout/' %}active{% endif %}">
+        <a href="javascript:void(0);" onclick="confirmLogout()">
+            <i class="fa fa-sign-out"></i> <span>Déconnexion</span>
+        </a>
+    </li>
+    </ul>
+        
+  </section>
+</aside>

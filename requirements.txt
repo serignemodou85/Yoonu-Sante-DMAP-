@@ -1,0 +1,15 @@
+Django>=5.0
+django-countries>=7.5
+python-decouple>=3.8
+mysqlclient>=2.2
+phonenumbers>=8.13
+langchain>=0.1.0
+langchain-ollama>=0.1.0
+langchain-community>=0.0.10
+faiss-cpu>=1.13
+xhtml2pdf>=0.2.15
+qrcode>=7.4
+plotly>=5.18
+Pillow>=10.0
+requests>=2.31
+django-ckeditor>=6.5

@@ -1,0 +1,296 @@
+{% load static %}
+{% include "Patient/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+        {% include "Patient/section/header.html" %}
+        {% include "Patient/section/menugauche.html" %}
+
+        <!-- Contenu -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 style="font-weight: 600; color: #2d3748;">
+                        <i class="fa fa-comments mr-2" style="color: var(--primary-blue);"></i>
+                        Assistant Médical Yoonu Sante
+                    </h1>
+                </div>
+                <ol class="breadcrumb">
+                    <li><a href="{% url 'patient' %}"><i class="fa fa-home"></i> Accueil</a></li>
+                    <li class="active"><i class="fa fa-robot"></i> ChatBot</li>
+                </ol>   
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+              <div class="row">
+                  <!-- Sidebar conversations -->
+                  <div class="col-md-3">
+                      <div class="box box-solid" style="border-radius: 12px;">
+                          <div class="box-header with-border">
+                              <h3 class="box-title" style="font-weight: 600;">
+                                  <i class="fa fa-commenting mr-2"></i>Conversations
+                              </h3>
+                              <div class="box-tools">
+                                  <a href="{% url 'nouvelle_conversation' %}" class="btn btn-primary btn-xs" 
+                                     style="border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                                      <i class="fa fa-plus"></i>
+                                  </a>
+                              </div>
+                          </div>
+                          <div class="box-body" style="max-height: 70vh; overflow-y: auto; padding: 10px;">
+                              <ul class="list-group">
+                                  {% for conv in conversations %}
+                                  <a href="{% url 'charger_conversation' conv.id %}" 
+                                     class="list-group-item {% if conv.id == conversation.id %}active{% endif %}">
+                                      <div class="d-flex justify-content-between">
+                                          <b>{{ conv.title|default:"Nouvelle conversation"|truncatechars:20 }}</b>
+                                          <small class="text-muted">{{ conv.created_at|date:"H:i" }}</small>
+                                      </div>
+                                      <small class="text-muted">{{ conv.created_at|date:"d/m/Y" }}</small>
+                                  </a>
+                                  {% empty %}
+                                  <li class="list-group-item text-center py-3">
+                                      <i class="fa fa-comment-slash text-muted mb-2" style="font-size: 20px;"></i><br>
+                                      Aucune conversation
+                                  </li>
+                                  {% endfor %}
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Chat principal -->
+                  <div class="col-md-9">
+                      <div class="box box-primary direct-chat direct-chat-primary" style="border-radius: 12px; overflow: hidden;">
+                          <div class="box-header with-border" style="background-color: white; border-bottom: 1px solid #e2e8f0;">
+                              <h3 class="box-title" style="font-weight: 600;">
+                                  <i class="fa fa-comment-medical mr-2"></i>
+                                  {{ conversation.title|default:"Chat avec l'assistant" }}
+                              </h3>
+                              <div class="box-tools pull-right">
+                                  <button type="button" id="delete-history-btn" class="btn btn-box-tool text-danger"
+                                     title="Supprimer TOUT l'historique" data-toggle="tooltip">
+                                      <i class="fa fa-trash"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Réduire">
+                                      <i class="fa fa-minus"></i>
+                                  </button>
+                              </div>
+                          </div>
+
+                          <!-- Zone de chat -->
+                          <div class="box-body" style="padding: 0; background: transparent;">
+                              <div class="direct-chat-messages" id="chat-messages">
+                                  {% for message in messages %}
+                                  <div class="direct-chat-msg {% if message.est_utilisateur %}right{% endif %}">
+                                      <div class="direct-chat-info clearfix">
+                                          <span class="direct-chat-name {% if not message.est_utilisateur %}pull-left{% else %}pull-right{% endif %}">
+                                              {% if message.est_utilisateur %}
+                                                  <i class="fa fa-user-circle mr-1"></i>{{ patient.prenom }}
+                                              {% else %}
+                                                  <i class="fa fa-robot mr-1"></i>Assistant DMAP
+                                              {% endif %}
+                                          </span>
+                                          <span class="direct-chat-timestamp {% if not message.est_utilisateur %}pull-right{% else %}pull-left{% endif %}">
+                                              {{ message.horodatage|date:"H:i" }}
+                                          </span>
+                                      </div>
+                                      <img class="direct-chat-img" 
+                                           src="{% if message.est_utilisateur %}{{ patient.image.url|default:'static/img/default-user.png' }}{% else %}{% static 'img/bot-avatar.png' %}{% endif %}" 
+                                           alt="Avatar">
+                                      <div class="direct-chat-text {% if message.is_urgent %}urgent{% endif %}">
+                                          {% if message.est_utilisateur %}
+                                              {{ message.message }}
+                                          {% else %}
+                                              {{ message.reponse|linebreaksbr }}
+                                          {% endif %}
+                                      </div>
+                                  </div>
+                                  {% endfor %}
+                              </div>
+                          </div>
+
+                          <!-- Formulaire de saisie -->
+                          <div class="box-footer" style="background-color: white; border-top: 1px solid #e2e8f0;">
+                              <form id="chat-form" method="POST">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="conversation_id" value="{{ conversation.id }}">
+                                  <div class="input-group">
+                                      <input type="text" 
+                                             name="message"
+                                             id="chat-input"
+                                             placeholder="Posez votre question à l'assistant..."
+                                             class="form-control"
+                                             autocomplete="off">
+                                      <span class="input-group-btn">
+                                          <button type="submit" class="btn btn-primary btn-flat" id="send-btn">
+                                              <i class="fa fa-paper-plane"></i>
+                                          </button>
+                                      </span>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </section>
+        </div>
+        <!-- End Contenu -->
+
+        {% include "Patient/section/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Patient/section/script.html" %}
+
+    <script>
+      $(document).ready(function() {
+          // Initialisation des tooltips
+          $('[data-toggle="tooltip"]').tooltip();
+          
+          const chatMessages = $('#chat-messages');
+          const chatForm = $('#chat-form');
+          const chatInput = $('#chat-input');
+          const sendBtn = $('#send-btn');
+          let isProcessing = false;
+
+          function scrollToBottom() {
+              chatMessages.animate({ scrollTop: chatMessages[0].scrollHeight }, 300);
+          }
+          scrollToBottom();
+
+          // Gestion de la suppression de l'historique
+          $('#delete-history-btn').on('click', function(e) {
+              e.preventDefault();
+              Swal.fire({
+                  title: 'Confirmer la suppression',
+                  text: "Voulez-vous vraiment supprimer définitivement TOUT votre historique de conversation ? L'action est irréversible.",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#e63946',
+                  cancelButtonColor: '#2a6fdb',
+                  confirmButtonText: 'Oui, supprimer',
+                  cancelButtonText: 'Annuler',
+                  backdrop: 'rgba(0,0,0,0.4)'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      $('#delete-history-form').submit();
+                  }
+              });
+          });
+
+          // Gestion du formulaire
+          chatForm.on('submit', function(e) {
+              e.preventDefault();
+              if (isProcessing) return;
+              
+              const message = chatInput.val().trim();
+              if (!message) return;
+
+              isProcessing = true;
+              sendBtn.html('<i class="fa fa-circle-notch fa-spin"></i>');
+              chatInput.prop('disabled', true);
+
+              // Ajouter le message utilisateur
+              appendMessage(message, true);
+
+              // Indicateur de frappe
+              showTypingIndicator();
+
+              $.ajax({
+                  url: "{% url 'chatbot' %}",
+                  type: 'POST',
+                  data: {
+                      message: message,
+                      conversation_id: "{{ conversation.id }}",
+                      csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+                  },
+                  success: function(response) {
+                      removeTypingIndicator();
+                      if (response.status === 'success' && response.response) {
+                          appendMessage(response.response, false, response.is_urgent);
+                      } else if (response.status === 'error' && response.response) {
+                          appendMessage(response.response, false, true);
+                      } else {
+                          appendMessage("Désolé, une erreur s'est produite. Veuillez réessayer.", false, true);
+                      }
+                  },
+                  error: function(xhr) {
+                      removeTypingIndicator();
+                      let errorMessage = "Erreur de connexion. Veuillez vérifier votre réseau.";
+                      if (xhr.status === 401) {
+                          window.location.href = "{% url 'user_login' %}";
+                          return;
+                      }
+                      appendMessage(errorMessage, false, true);
+                  },
+                  complete: function() {
+                      isProcessing = false;
+                      sendBtn.html('<i class="fa fa-paper-plane"></i>');
+                      chatInput.prop('disabled', false).val('').focus();
+                  }
+              });
+          });
+
+          function appendMessage(content, isUser, isUrgent = false) {
+              const timestamp = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+              const avatar = isUser 
+                  ? "{{ patient.image.url|default:'/static/img/default-user.png' }}" 
+                  : "{% static 'img/bot-avatar.png' %}";
+              
+              const messageHtml = `
+                  <div class="direct-chat-msg ${isUser ? 'right' : ''}">
+                      <div class="direct-chat-info clearfix">
+                          <span class="direct-chat-name ${!isUser ? 'pull-left' : 'pull-right'}">
+                              ${isUser ? '<i class="fa fa-user-circle mr-1"></i>{{ patient.prenom }}' : '<i class="fa fa-robot mr-1"></i>Assistant DMAP'}
+                          </span>
+                          <span class="direct-chat-timestamp ${!isUser ? 'pull-right' : 'pull-left'}">
+                              ${timestamp}
+                          </span>
+                      </div>
+                      <img class="direct-chat-img" src="${avatar}" alt="Avatar">
+                      <div class="direct-chat-text ${isUrgent ? 'urgent' : ''}">
+                          ${content}
+                      </div>
+                  </div>`;
+              chatMessages.append(messageHtml);
+              scrollToBottom();
+          }
+
+          function showTypingIndicator() {
+              const indicatorHtml = `
+                  <div class="direct-chat-msg" id="typing-indicator">
+                      <div class="direct-chat-info clearfix">
+                          <span class="direct-chat-name pull-left">
+                              <i class="fa fa-robot mr-1"></i>Assistant DMAP
+                          </span>
+                      </div>
+                      <img class="direct-chat-img" src="{% static 'img/bot-avatar.png' %}" alt="Avatar">
+                      <div class="direct-chat-text">
+                          <div class="typing-indicator">
+                              <div class="typing-dot"></div>
+                              <div class="typing-dot"></div>
+                              <div class="typing-dot"></div>
+                          </div>
+                      </div>
+                  </div>`;
+              chatMessages.append(indicatorHtml);
+              scrollToBottom();
+          }
+
+          function removeTypingIndicator() {
+              $('#typing-indicator').remove();
+          }
+
+          // Auto-resize de l'input
+          chatInput.on('input', function() {
+              this.style.height = 'auto';
+              this.style.height = (this.scrollHeight) + 'px';
+          });
+      });
+  </script>
+
+  <form id="delete-history-form" method="POST" action="{% url 'delete_chat_history' %}" style="display: none;">
+      {% csrf_token %}
+  </form>
+</body>
+</html>

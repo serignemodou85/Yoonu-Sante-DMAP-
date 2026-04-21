@@ -1,0 +1,359 @@
+{% load static %}
+{% include "Patient/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+        {% include "Patient/section/header.html" %}
+        {% include "Patient/section/menugauche.html" %}
+
+        <!-- Contenue -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Profil
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                    <li><a href="#"><i class="fa fa-dashboard"></i>Profil</a></li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Profil</h3>
+                            </div>
+                            <div class="box-header">
+                                <h3 class="box-title">
+                                  {% if profil_complet %}
+                                    <a href="#" class="btn btn-outline-success rounded-pill px-4 py-2 shadow-sm" data-toggle="modal" data-target="#profilViewModal">
+                                      <i class="fa fa-eye"></i> Voir infos supplémentaires
+                                    </a>
+                                  {% else %}
+                                    <a href="#" class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm" data-toggle="modal" data-target="#profilModal">
+                                      <i class="fa fa-id-badge"></i> Compléter mon Profil
+                                    </a>
+                                  {% endif %}
+
+                                                          
+                                </h3>
+                            </div>                                                         
+                            <div class="box-body">
+                                <section style="background-color: #eee;">
+                                    <div class="container py-5">
+                                      <div class="row">
+                                        <div class="col-lg-4">
+                                          <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                              {% if image %}
+                                                  <img src="{{ image }}" alt="Admin" class="rounded-circle" style="width: 100px;">
+                                              {% else %}
+                                                  <img src="{% static 'img/photo-indisponible.webp' %}" alt="Admin par défaut" class="rounded-circle" width="150">
+                                              {% endif %}
+                                              <h5 class="my-3">{{ full_name }}</h5>
+                                              <p class="text-muted mb-1">Patient</p>
+                                              <div class="row">
+                                                <div class="col-sm-12">
+                                                    <a class="btn btn-info" data-toggle="modal" data-target="#modal-modifier-photo">Modifier Photo de Profil</a>
+                                                </div>
+                                              </div>
+                                          </div>
+                                          </div>
+                                          <div class="card mb-4 mb-lg-0">
+                                            <div class="card mt-3">
+                                              <div class="card-body">
+                                                <form method="POST" action="{% url 'changer_mot_de_passe_patient' %}">
+                                                  {% csrf_token %}
+                                                  <div class="mb-3">
+                                                    <label for="oldPassword" class="form-label">Ancien mot de passe</label>
+                                                    <input type="password" class="form-control" name="old_password" required>
+                                                  </div>
+                                                  <div class="mb-3">
+                                                    <label for="newPassword" class="form-label">Nouveau mot de passe</label>
+                                                    <input type="password" class="form-control" name="new_password" required>
+                                                  </div>
+                                                  <div class="mb-3">
+                                                    <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+                                                    <input type="password" class="form-control" name="confirm_password" required>
+                                                  </div>
+                                                  <button type="submit" class="btn btn-primary">Changer</button>
+                                                </form>        
+                                              </div>
+                                          </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-lg-8">
+                                          <div class="card mb-4">
+                                            <div class="card-body">
+                                              <div class="row">
+                                                <div class="col-sm-3">
+                                                  <p class="mb-0">Nom Complet</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                  <p class="text-muted mb-0">{{ full_name }}</p>
+                                                </div>
+                                              </div>
+                                              <hr>
+                                              <div class="row">
+                                                <div class="col-sm-3">
+                                                  <p class="mb-0">Email</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                  <p class="text-muted mb-0">{{ email }}</p>
+                                                </div>
+                                              </div>
+                                              <hr>
+                                              <div class="row">
+                                                <div class="col-sm-3">
+                                                  <p class="mb-0">Telephone</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                  <p class="text-muted mb-0">{{ telephone }}</p>
+                                                </div>
+                                              </div>
+                                              <hr>
+                                              <hr>
+                                              <div class="row">
+                                                <div class="col-sm-3">
+                                                  <p class="mb-0">Adresse</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                  <p class="text-muted mb-0">{{ adresse }}</p>
+                                                </div>
+                                              </div>
+                                              <hr>
+                                              <div class="row">
+                                                <div class="col-sm-12">
+                                                    <a class="btn btn-info" data-toggle="modal" data-target="#modal-modifier-infos">Modifier les Infos</a>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </section>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </section>
+        </div>
+        <!-- End Contenue -->
+
+        {% include "Patient/section/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Patient/section/script.html" %}
+
+    <div class="modal fade" id="modal-modifier-infos" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <form method="post" action="{% url 'modifier_infos_patient' %}">
+              {% csrf_token %}
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Modifier les informations</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="nom" class="form-label">Nom</label>
+                  <input type="text" class="form-control" id="nom" name="nom" value="{{ nom }}">
+                </div>
+                <div class="mb-3">
+                  <label for="prenom" class="form-label">Prénom</label>
+                  <input type="text" class="form-control" id="prenom" name="prenom" value="{{ prenom }}">
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" name="email" value="{{ email }}">
+                </div>
+                <div class="mb-3">
+                  <label for="telephone" class="form-label">Téléphone</label>
+                  <input type="text" class="form-control" id="telephone" name="telephone" value="{{ telephone }}">
+                </div>
+                <div class="mb-3">
+                  <label for="adresse" class="form-label">Adresse</label>
+                  <input type="text" class="form-control" id="adresse" name="adresse" value="{{ adresse }}">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal fade" id="modal-modifier-photo" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <form method="post" action="{% url 'modifier_photo_patient' %}" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Modifier Photo Profil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+              </div>
+              <div class="modal-body">
+                <div class="pull-left image">
+                  {% if image %}
+                      <img src="{{ image }}" alt="Admin" class="rounded-circle" width="100">
+                  {% else %}
+                      <img src="{% static 'img/photo-indisponible.webp' %}" alt="Admin par défaut" class="rounded-circle" width="150">
+                  {% endif %}
+                </div>
+                <div class="mb-3">
+                  <label for="photo" class="form-label">Photo de profil</label>
+                  <input type="file" class="form-control" id="photo" name="photo" onchange="previewImage(event)">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="profilModal" tabindex="-1" role="dialog" aria-labelledby="profilModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+          
+            <div class="modal-header">
+              <h5 class="modal-title" id="profilModalLabel">Compléter mon Profil</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+      
+            <form method="POST" action="{% url 'completer_profil' %}">
+              {% csrf_token %}
+              <div class="modal-body">
+                
+                <div class="form-group">
+                  <label for="lieu_naissance">Lieu de Naissance</label>
+                  <input type="text" class="form-control" id="lieu_naissance" name="lieu_naissance" maxlength="50" required>
+                </div>
+      
+                <div class="form-group">
+                  <label for="groupe_sanguin">Groupe Sanguin</label>
+                  <select class="form-control" id="groupe_sanguin" name="groupe_sanguin" required>
+                    <option value="">--- Choisir ---</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                </div>
+      
+                <div class="form-group">
+                  <label for="situation_familiale">Situation Familiale</label>
+                  <select class="form-control" id="situation_familiale" name="situation_familiale" required>
+                    <option value="">--- Choisir ---</option>
+                    <option value="célibataire">Célibataire</option>
+                    <option value="marié(e)">Marié(e)</option>
+                    <option value="divorcé(e)">Divorcé(e)</option>
+                    <option value="veuf(ve)">Veuf(ve)</option>
+                  </select>
+                </div>
+      
+                <div class="form-group">
+                  <label for="profession">Profession</label>
+                  <input type="text" class="form-control" id="profession" name="profession" maxlength="50" required>
+                </div>
+      
+                <div class="form-group">
+                  <label for="contact_urgence">Contact d'Urgence</label>
+                  <input type="tel" class="form-control" id="contact_urgence" name="contact_urgence" maxlength="15" required>
+                </div>
+      
+              </div>
+      
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+              </div>
+            </form>
+      
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="profilViewModal" tabindex="-1" role="dialog" aria-labelledby="profilViewModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <form method="POST" action="{% url 'modifier_infos_supplementaire' %}">
+            {% csrf_token %}
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="profilViewModalLabel">Mes informations supplémentaires</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+      
+              <div class="modal-body">
+                <table class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <th>Lieu de Naissance</th>
+                      <td><input type="text" name="lieu_naissance" class="form-control" value="{{ patient.lieu_naissance }}" disabled></td>
+                    </tr>
+                    <tr>
+                      <th>Date de Naissance</th>
+                      <td><input type="date" name="date_naissance" class="form-control" value="{{ patient.date_naissance|date:'Y-m-d' }}" disabled></td>
+                    </tr>
+                    <tr>
+                      <th>Groupe Sanguin</th>
+                      <td><input type="text" name="groupe_sanguin" class="form-control" value="{{ patient.groupe_sanguin }}" disabled></td>
+                    </tr>
+                    <tr>
+                      <th>Situation Familiale</th>
+                      <td><input type="text" name="situation_familiale" class="form-control" value="{{ patient.situation_familiale }}" disabled></td>
+                    </tr>
+                    <tr>
+                      <th>Profession</th>
+                      <td><input type="text" name="profession" class="form-control" value="{{ patient.profession }}" disabled></td>
+                    </tr>
+                    <tr>
+                      <th>Contact d'Urgence</th>
+                      <td><input type="text" name="contact_urgence" class="form-control" value="{{ patient.contact_urgence }}" disabled></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+      
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" id="editBtn">
+                  <i class="fas fa-edit"></i> Modifier
+                </button>
+              
+                <button type="submit" class="btn btn-primary btn-sm d-none" id="saveBtn">
+                  <i class="fas fa-save"></i> Enregistrer
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <script>
+        document.getElementById('editBtn').addEventListener('click', function () {
+          document.querySelectorAll('#profilViewModal input').forEach(el => el.removeAttribute('disabled'));
+          document.getElementById('editBtn').classList.add('d-none');
+          document.getElementById('saveBtn').classList.remove('d-none');
+        });
+      </script>
+      
+      
+</body>
+</html>

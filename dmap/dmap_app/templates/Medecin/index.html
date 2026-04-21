@@ -1,0 +1,113 @@
+{% load static %}
+{% include "Medecin/section/head.html" %}
+<body class="skin-blue">
+  <div class="wrapper"> 
+    {% include "Medecin/section/header.html" %}
+    {% include "Medecin/section/menugauche.html" %}
+
+    <!-- Contenue -->
+    <div class="content-wrapper">
+      <section class="content-header">
+        <h1>Accueil</h1>
+        <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        </ol>
+      </section>
+
+      <section class="content">
+        <div class="row">
+
+          <!-- Rendez-vous aujourd'hui -->
+          <div class="col-lg-4 col-xs-12">
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3>{{ nb_rdv_du_jour|default:"0" }}</h3>
+                <p>Rendez-vous aujourd'hui</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Consultations faites -->
+          <div class="col-lg-4 col-xs-12">
+            <div class="small-box bg-yellow">
+              <div class="inner">
+                <h3>{{ nb_consultations|default:"0" }}</h3>
+                <p>Consultations faites</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-stethoscope"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Examens faits -->
+          <div class="col-lg-4 col-xs-12">
+            <div class="small-box bg-purple">
+              <div class="inner">
+                <h3>{{ nb_examen|default:"0" }}</h3>
+                <p>Examens faits</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-flask"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prescriptions faites -->
+          <div class="col-lg-4 col-xs-12">
+            <div class="small-box bg-red">
+              <div class="inner">
+                <h3>{{ nb_prescription|default:"0" }}</h3>
+                <p>Prescriptions faites</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-medkit"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dossiers créés -->
+          <div class="col-lg-4 col-xs-12">
+            <div class="small-box bg-teal">
+              <div class="inner">
+                <h3>{{ nb_dossier|default:"0" }}</h3>
+                <p>Dossiers créés</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-folder-open"></i>
+              </div>
+            </div>
+          </div>
+
+          <canvas id="consultationChart" width="400" height="200"></canvas>
+<script>
+  const ctx = document.getElementById('consultationChart').getContext('2d');
+  const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: {{ labels_json|safe }},
+          datasets: [{
+              label: 'Consultations par mois',
+              data: {{ data_json|safe }},
+              borderColor: 'rgba(75, 192, 192, 1)',
+              fill: false
+          }]
+      }
+  });
+</script>
+
+
+        </div>
+      </section>
+
+    </div>
+    <!--End Contenue -->
+
+    {% include "Medecin/section/footer.html" %}
+  </div><!-- ./wrapper -->
+  {% include "Medecin/section/script.html" %}
+</body>
+</html>

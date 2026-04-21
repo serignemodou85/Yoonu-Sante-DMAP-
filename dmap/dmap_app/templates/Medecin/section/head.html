@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>medecin| Accueil</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <!-- Bootstrap 3.3.2 -->
+    <link href="{% static 'medecin/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />    
+    <!-- FontAwesome 4.3.0 -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Ionicons 2.0.0 -->
+    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />    
+    <!-- Theme style -->
+    <link href="{% static 'medecin/dist/css/AdminLTE.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- AdminLTE Skins -->
+    <link href="{% static 'medecin/dist/css/skins/_all-skins.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- iCheck -->
+    <link href="{% static 'medecin/plugins/iCheck/flat/blue.css' %}" rel="stylesheet" type="text/css" />
+    <!-- Morris chart -->
+    <link href="{% static 'medecin/plugins/morris/morris.css' %}" rel="stylesheet" type="text/css" />
+    <!-- jvectormap -->
+    <link href="{% static 'medecin/plugins/jvectormap/jquery-jvectormap-1.2.2.css' %}" rel="stylesheet" type="text/css" />
+    <!-- Date Picker -->
+    <link href="{% static 'medecin/plugins/datepicker/datepicker3.css' %}" rel="stylesheet" type="text/css" />
+    <!-- Daterange picker -->
+    <link href="{% static 'medecin/plugins/daterangepicker/daterangepicker-bs3.css' %}" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="{% static 'medecin/css/footer.css' %}">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link href="{% static 'medecin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}" rel="stylesheet" type="text/css" />
+    
+    <!-- HTML5 Shim and Respond.js for IE8 support -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <!-- DATA TABLES -->
+    <link href="{% static 'medecin/plugins/datatables/dataTables.bootstrap.css' %}" rel="stylesheet" type="text/css" />
+  
+    <!-- Bootstrap 3.3.2 -->
+    <link href="{% static 'medecin/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+    
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Ionicons -->
+    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- DATA TABLES -->
+    <link href="{% static 'medecin/plugins/datatables/dataTables.bootstrap.css' %}" rel="stylesheet" type="text/css" />
+    
+    <!-- Theme style -->
+    <link href="{% static 'medecin/dist/css/AdminLTE.min.css' %}" rel="stylesheet" type="text/css" />
+    
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link href="{% static 'medecin/dist/css/skins/_all-skins.min.css' %}" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+    <style>
+     
+      .main-body {
+          padding: 15px;
+      }
+      .card {
+          box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+      }
+      
+      .card {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+          word-wrap: break-word;
+          background-color: #fff;
+          background-clip: border-box;
+          border: 0 solid rgba(0,0,0,.125);
+          border-radius: .25rem;
+      }
+      
+      .card-body {
+          flex: 1 1 auto;
+          min-height: 1px;
+          padding: 1rem;
+      }
+      
+      .gutters-sm {
+          margin-right: -8px;
+          margin-left: -8px;
+      }
+      
+      .gutters-sm>.col, .gutters-sm>[class*=col-] {
+          padding-right: 8px;
+          padding-left: 8px;
+      }
+      .mb-3, .my-3 {
+          margin-bottom: 1rem!important;
+      }
+      
+      .bg-gray-300 {
+          background-color: #e2e8f0;
+      }
+      .h-100 {
+          height: 100%!important;
+      }
+      .shadow-none {
+          box-shadow: none!important;
+      }
+      #map {
+        height: 700px;
+        width: 100%;
+    }
+      </style>
+
+      <style>
+        
+        
+    </style>
+    
+      {% csrf_token %}
+
+      <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.0/dist/sweetalert2.min.css">
+
+      <!-- jQuery (obligatoire pour DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+  </head>
+</html>

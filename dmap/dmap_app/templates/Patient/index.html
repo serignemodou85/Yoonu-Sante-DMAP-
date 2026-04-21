@@ -1,0 +1,178 @@
+{% load static %}
+{% include "Patient/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+      {% include "Patient/section/header.html" %}
+      {% include "Patient/section/menugauche.html" %}
+
+      <!-- Contenue -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Accueil
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'patient'%}"><i class="fa fa-dashboard"></i>Acceuil</a></li>
+          </ol>
+        </section>
+        <section class="content">
+          <div class="row">
+            <!-- Consultations -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3>{{ nombre_consultation }}</h3>
+                  <p>Consultations</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-stethoscope"></i> <!-- Icône adaptée aux consultations -->
+                </div>
+              </div>
+            </div>
+        
+            <!-- Examens -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3>{{ nombre_examen }}</h3>
+                  <p>Examens</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-flask"></i> <!-- Icône laboratoire/examen -->
+                </div>
+              </div>
+            </div>
+        
+            <!-- Prescriptions -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>{{ nombre_prescription }}</h3>
+                  <p>Prescriptions</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-file-text-o"></i> <!-- Icône d'ordonnance ou document -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Documents -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-purple">
+                <div class="inner">
+                  <h3>{{ nombre_document }}</h3>
+                  <p>Documents</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-file-text-o"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rendez-vous -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>{{ nombre_rendez_vous|default:"0" }}</h3>
+                  <p>Rendez-vous</p>
+                  <p>{{ nombre_rendez_termine|default:"0" }} Rendez-vous terminé</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+            <!-- Rendez-vous à venir -->
+          <div class="container my-4">
+    <h4 class="text-primary mb-3">
+        <i class="bi bi-calendar-event-fill me-2"></i> Prochain rendez-vous
+    </h4>
+    
+    {% if rendez_vous_a_venir %}
+        {% with next_appointment=rendez_vous_a_venir.first %}
+        <div class="card border-primary shadow-sm mb-3">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>
+                        <i class="bi bi-calendar-check me-2"></i>
+                        {{ next_appointment.date_rendez_vous|date:"l d F Y" }}
+                    </span>
+                    <span class="badge bg-light text-primary">
+                        {{ next_appointment.date_rendez_vous|time:"H:i" }}
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="card-title text-primary">
+                            <i class="bi bi-journal-text me-2"></i>
+                            Motif
+                        </h5>
+                        <p class="card-text">{{ next_appointment.description|default:"Aucun motif précisé" }}</p>
+                    </div>
+                    <div class="text-end">
+                        <div class="mb-2">
+                            <span class="text-muted small">Médecin</span>
+                            <div class="fw-bold">
+                                Dr {{ next_appointment.medecin.prenom }} {{ next_appointment.medecin.nom }}
+                            </div>
+                        </div>
+                        {% if next_appointment.lieu %}
+                        <div>
+                            <span class="text-muted small">Lieu</span>
+                            <div class="fw-bold">{{ next_appointment.lieu }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if rendez_vous_a_venir.count > 1 %}
+                <div class="mt-3 text-muted small">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Vous avez {{ rendez_vous_a_venir.count }} rendez-vous programmés
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-light d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bi bi-alarm me-1"></i>
+                    {% if next_appointment.date_rendez_vous|timeuntil > "0" %}
+                        Dans {{ next_appointment.date_rendez_vous|timeuntil }}
+                    {% else %}
+                        Aujourd'hui
+                    {% endif %}
+                </div>
+                <a href="{% url 'historique_rendez_vous' %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-list-ul me-1"></i> Voir tous
+                </a>
+            </div>
+        </div>
+        {% endwith %}
+    {% else %}
+        <div class="alert alert-info d-flex align-items-center" role="alert">
+            <i class="bi bi-calendar-x-fill me-3 fs-4"></i>
+            <div>
+                <h5 class="alert-heading mb-1">Aucun rendez-vous programmé</h5>
+                <p class="mb-0 small">Vous n'avez pas de rendez-vous à venir pour le moment.</p>
+            </div>
+        </div>
+        
+       
+    {% endif %}
+</div>
+            
+        </section>
+        
+      </div>
+      <!--End Contenue -->
+
+      {% include "Patient/section/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Patient/section/script.html" %}
+
+  </body>
+</html>

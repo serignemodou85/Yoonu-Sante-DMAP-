@@ -1,0 +1,117 @@
+{% load static %}
+{% include "Medecin/section/head.html" %}
+<body class="skin-blue">
+<div class="wrapper"> 
+    {% include "Medecin/section/header.html" %}
+    {% include "Medecin/section/menugauche.html" %}
+
+    <!-- Contenu -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Liste des Notifications</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                <li class="active"><i class="fa fa-bell"></i> Notifications</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Liste des Notifications</h3>
+                        </div>
+
+                        <!-- SweetAlert pour messages Django -->
+                        {% if messages %}
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                {% for message in messages %}
+                                Swal.fire({
+                                    icon: "{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% elif 'warning' in message.tags %}warning{% else %}info{% endif %}",
+                                    title: "{{ message.tags|capfirst }}",
+                                    text: "{{ message|escapejs }}",
+                                    timer: 3000,
+                                    showConfirmButton: false
+                                });
+                                {% endfor %}
+                            });
+                        </script>
+                        {% endif %}
+
+                        <div class="box-body">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Type Notification</th>
+                                        <th>Description</th>
+                                        <th>Date Réception</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for notification in page_obj %}
+                                    <tr>
+                                        <td>{{ notification.type_notification }}</td>
+                                        <td>{{ notification.description }}</td>
+                                        <td>{{ notification.created_at|date:"d/m/Y H:i" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center">Aucune notification disponible</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <nav aria-label="Pagination">
+                                <ul class="pagination justify-content-center">
+                                  {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+                                    </li>
+                                  {% else %}
+                                    <li class="page-item disabled">
+                                      <span class="page-link">Précédent</span>
+                                    </li>
+                                  {% endif %}
+                              
+                                  {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                      <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                      <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                    {% endif %}
+                                  {% endfor %}
+                              
+                                  {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                      <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a>
+                                    </li>
+                                  {% else %}
+                                    <li class="page-item disabled">
+                                      <span class="page-link">Suivant</span>
+                                    </li>
+                                  {% endif %}
+                                </ul>
+                              </nav>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section>
+    </div>
+    <!-- Fin Contenu -->
+
+    {% include "Medecin/section/footer.html" %}
+</div><!-- ./wrapper -->
+
+{% include "Medecin/section/script.html" %}
+
+<!-- SweetAlert2 CDN si non déjà inclus dans script.html -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Ton JS personnalisé -->
+<script src="{% static 'admin/js/message1.js' %}" type="text/javascript"></script>
+
+</body>
+</html>

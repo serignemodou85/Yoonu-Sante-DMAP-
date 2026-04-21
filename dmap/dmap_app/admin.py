@@ -1,0 +1,28 @@
+from django.contrib import admin
+from .models import *
+
+# Register all models
+admin.site.register(Administrateur)
+admin.site.register(StructureSante)
+admin.site.register(Specialisation)
+admin.site.register(Service)
+admin.site.register(Utilisateur)
+admin.site.register(Medecin)
+admin.site.register(Patient)
+admin.site.register(DossierMedical)
+admin.site.register(ExamenMedical)
+admin.site.register(Consultation)
+admin.site.register(Prescription)
+admin.site.register(DocumentMedical)
+admin.site.register(InfoConfidentielle)
+admin.site.register(Notification)
+admin.site.register(DemandeCarte)
+admin.site.register(PasswordResetToken)
+admin.site.register(PasswordResetTokenMedecin)
+admin.site.register(RendezVous)
+admin.site.register(AlerteSanitaire)
+admin.site.register(AuditLog)
+admin.site.register(Temoin)
+admin.site.register(MessageVisiteur)
+admin.site.register(Conversation)
+admin.site.register(ChatMessage)

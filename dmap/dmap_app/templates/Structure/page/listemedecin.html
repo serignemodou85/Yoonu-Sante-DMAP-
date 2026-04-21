@@ -1,0 +1,547 @@
+{% load static %}
+{% include "Structure/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+        {% include "Structure/section/header.html" %}
+        {% include "Structure/section/menugauche.html" %}
+
+        <!-- Contenue -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                   Liste Medecins
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                    <li><a href="#"><i class="fa fa-dashboard"></i>Liste Medecins</a></li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Liste Medecins</h3>
+                            </div> 
+
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <script>
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Succès',
+                                            text: '{{ message }}',
+                                            timer: 3000,
+                                            showConfirmButton: false
+                                        });
+                                    </script>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="box-body">
+                                <div class="box-header" style="display: flex; justify-content: flex-end; gap: 10px;">
+                                    <h3 class="box-title">
+                                        <a href="#" class="btn btn-ajouter-medecin" data-toggle="modal" data-target="#ajouterModal">
+                                            <i class="fa fa-user-plus"></i> Ajout Médecin
+                                        </a>
+                                    </h3>
+                                    
+                                    <h3 class="box-title">
+                                        <a href="#" class="btn btn-archive" onclick="toggleTables()">
+                                            <i class="fa fa-folder"></i> Archive
+                                        </a>
+                                    </h3>   
+                                    <!-- Bouton "Retour à la liste des non archivés" -->
+                                    <h3 class="box-title" id="btn-retour" style="display: none;">
+                                        <a href="#" class="btn btn-primary" onclick="toggleTables()">
+                                            <i class="fa fa-arrow-left"></i> Retour
+                                        </a>
+                                    </h3>                                 
+                                </div>
+                                <div id="medecins-non-archives">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th>Nom</th>
+                                                <th>Prénom</th>
+                                                <th>Téléphone</th>
+                                                <th>Email</th>
+                                                <th>Sexe</th>
+                                                <th>Spécialité</th>
+                                                <th>Adresse</th>
+                                                <th>Actions</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for listemedecin in page_obj %}
+                                                <tr>  
+                                                    <td>
+                                                        {% if listemedecin.image %}
+                                                            <img src="{{ listemedecin.image.url }}" alt="Photo de {{ listemedecin.nom }}" style="width: 30px; height: 30px; object-fit: cover;">
+                                                        {% else %}
+                                                            Aucune image
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ listemedecin.nom }}</td>
+                                                    <td>{{ listemedecin.prenom }}</td>
+                                                    <td>{{ listemedecin.telephone }}</td>
+                                                    <td>{{ listemedecin.email }}</td>
+                                                    <td>{{ listemedecin.sexe }}</td>
+                                                    <td>{{ listemedecin.specialisation }}</td>
+                                                    <td>{{ listemedecin.adresse }}</td>
+                                                    <td>
+                                                        <!-- Bouton Voir -->
+                                                        <a href="#" class="btn btn-sm btn-info" title="Voir" 
+                                                        data-toggle="modal" data-target="#modalVoir{{ listemedecin.id }}" style="display:inline-block;">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+
+                                                        <!-- Bouton Modifier -->
+                                                        <button class="btn btn-sm btn-info" title="Modifier"
+                                                        data-toggle="modal" data-target="#modalModifier{{ listemedecin.id }}" style="display:inline-block;">
+                                                        <i class="fa fa-edit"></i> Modifier
+                                                        </button>
+
+                                                    
+                                                        <!-- Bouton Archiver -->
+                                                        <form method="post" action="{% url 'archiver_medecin_structure' listemedecin.id %}" class="archiver-form" 
+                                                            data-message="Voulez-vous vraiment archiver le médecin {{ listemedecin.nom }} {{ listemedecin.prenom }} ?" 
+                                                            style="display:inline-block; margin-left:5px;">
+                                                            {% csrf_token %}
+                                                            <button type="button" class="btn btn-sm btn-danger confirm-action" title="Archiver">
+                                                                <i class="fa fa-archive"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>                                               
+                                                </tr>
+                                            {% empty %}
+                                                <tr>
+                                                    <td colspan="8" class="text-center">Aucun médecin enregistré</td>
+                                                </tr>
+                                            {% endfor %}
+                                            
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center">
+                                        <ul class="pagination justify-content-center">
+                                            {% if page_obj.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% for page in page_obj.paginator.page_range %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                                            {% endfor %}
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div id="medecins-archives" style="display: none;">
+                                    <table id="example2" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Nom</th>
+                                                <th>Prénom</th>
+                                                <th>Téléphone</th>
+                                                <th>Email</th>
+                                                <th>Adresse</th>
+                                                <th>Spécialité</th>
+                                                <th>Sexe</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for medecin in page_obj_archives %}
+                                            <tr>
+                                                <td>{{ medecin.nom }}</td>
+                                                <td>{{ medecin.prenom }}</td>
+                                                <td>{{ medecin.telephone }}</td>
+                                                <td>{{ medecin.email }}</td>
+                                                <td>{{ medecin.adresse }}</td>
+                                                <td>{{ medecin.specialisation }}</td>
+                                                <td>{{ medecin.sexe }}</td>
+                                                <td>
+                                                    <!-- Bouton Archiver -->
+                                                    <form method="post" action="{% url 'desarchiver_medecin_structure' medecin.id %}" class="archiver-form" 
+                                                        data-message="Voulez-vous vraiment desarchiver le médecin {{ medecin.nom }} {{ medecin.prenom }} ?" 
+                                                        style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-danger confirm-action" title="Desarchiver">
+                                                            <i class="fa fa-archive"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="7" class="text-center">Aucun médecin archivé</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center">
+                                        <ul class="pagination justify-content-center">
+                                            {% if page_obj_archives.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page_archives={{ page_obj_archives.previous_page_number }}">
+                                                        <span aria-hidden="true">&laquo;</span>                 
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% for page in page_obj_archives.paginator.page_range %}
+                                                <li class="page-item"><a class="page-link" href="?page_archives={{ page }}">{{ page }}</a></li>
+                                            {% endfor %}
+                                    
+                                </div>
+
+                                {% for listemedecin in listemedecins %}
+                                    <div class="modal fade" id="modalVoir{{ listemedecin.id }}" tabindex="-1" role="dialog" aria-labelledby="modalVoirLabel{{ listemedecin.id }}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-info">
+                                                    <h4 class="modal-title" id="modalVoirLabel{{ medecin.id }}">Détails du Médecin</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p><strong>Nom :</strong> {{ listemedecin.nom }}</p>
+                                                    <p><strong>Prénom :</strong> {{ listemedecin.prenom }}</p>
+                                                    <p><strong>Téléphone :</strong> {{ listemedecin.telephone }}</p>
+                                                    <p><strong>Email :</strong> {{ listemedecin.email }}</p>
+                                                    <p><strong>Sexe :</strong> {{ listemedecin.sexe }}</p>
+                                                    <p><strong>Spécialité :</strong> {{ listemedecin.specialisation }}</p>
+                                                    <p><strong>Adresse :</strong> {{ listemedecin.adresse }}</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </section>
+        </div>
+        <!-- End Contenue -->
+
+        {% include "Structure/section/footer.html" %}
+    </div><!-- ./wrapper -->
+
+    <!-- Modal Ajout Médecin -->
+    <div class="modal fade" id="ajouterModal" tabindex="-1" role="dialog" aria-labelledby="ajouterModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="ajouterModalLabel">Ajouter un Médecin</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulaire d'ajout médecin -->
+                    <form method="POST" action="{% url 'ajouter_un_medecin' %}" id="form" name="form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- ETAPE 1 -->
+                        <div id="step1" class="form-step">
+                            <div class="form-group">
+                                <label for="prenom">Prénom</label>
+                                <input type="text" class="form-control" id="prenom" name="prenom" required>
+                                <span class="error-message" id="prenomError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="nom">Nom</label>
+                                <input type="text" class="form-control" id="nom" name="nom" required>
+                                <span class="error-message" id="nomError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="nom">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <span class="error-message" id="emailError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="sexe">Sexe</label>
+                                <select class="form-control" id="sexe" name="sexe" required>
+                                    <option value="">-- Choisir --</option>
+                                    <option value="M">Homme</option>
+                                    <option value="F">Femme</option>
+                                </select>
+                                <span class="error-message" id="sexeError"></span>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="nextBtn">Suivant</button>
+                        </div>
+                    
+                        <!-- ETAPE 2 -->
+                        <div id="step2" class="form-step" style="display: none;">
+                            <div class="form-group">
+                                <label for="pays">Pays</label>
+                                {{ form.pays }}
+                                <span class="error-message" id="paysError">{{ form.pays.errors }}</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="telephone">Téléphone</label>
+                                {{ form.telephone }}
+                                <span class="error-message" id="telephoneError">{{ form.telephone.errors }}</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="adresse">Adresse</label>
+                                <input type="text" class="form-control" id="adresse" name="adresse" required>
+                                <span class="error-message" id="adresseError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Photo</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                <span class="error-message" id="photoError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialisation">Spécialisation</label>
+                                <select class="form-control" id="specialisation" name="specialisation" required>
+                                    <option value="">-- Choisir --</option>
+                                    {% for spec in specialisations %}
+                                        <option value="{{ spec.id }}">{{ spec.nom }}</option>
+                                    {% endfor %}
+                                </select>
+                                <span class="error-message" id="specialisationError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="service">Service</label>
+                                <select class="form-control" id="service" name="service" required>
+                                    <option value="">-- Choisir --</option>
+                                    {% for service in services %}
+                                        <option value="{{ service.id }}">{{ service.nom }}</option>
+                                    {% endfor %}
+                                </select>
+                                <span class="error-message" id="serviceError"></span>
+                            </div>
+                             <!-- Afficher l'erreur si elle est présente -->
+                            {% if error_message %}
+                                <p id="error" style="color: red;">{{ error_message }}</p>
+                            {% endif %}
+                            <button type="button" class="btn btn-secondary" id="prevBtn">Précédent</button>
+                            <button type="submit" class="btn btn-success">Ajouter</button>
+                        </div>
+                    </form>
+                    <div class="progress-container mb-3">
+                        <div class="progress-indicator">
+                            <span id="stepIndicatorText">Étape 1 sur 2</span>
+                            <div class="progress-bar">
+                                <div id="progressFill" class="fill" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for listemedecin in listemedecins %}
+    <div class="modal fade" id="modalModifier{{ listemedecin.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ listemedecin.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <form action="{% url 'modifier_medecin' listemedecin.id %}" method="POST">
+              {% csrf_token %}
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel{{ listemedecin.id }}">Modifier Médecin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+      
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="nom">Nom</label>
+                  <input type="text" name="nom" class="form-control" value="{{ listemedecin.nom }}" required>
+                </div>
+                <div class="form-group">
+                  <label for="prenom">Prénom</label>
+                  <input type="text" name="prenom" class="form-control" value="{{ listemedecin.prenom }}" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" name="email" class="form-control" value="{{ listemedecin.email }}" required>
+                </div>
+              </div>
+      
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+      
+    
+    <script>
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        });
+    
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step1').style.display = 'block';
+        });
+    </script>
+    <script>
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const stepText = document.getElementById('stepIndicatorText');
+        const progressFill = document.getElementById('progressFill');
+    
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+            stepText.textContent = 'Étape 2 sur 2';
+            progressFill.style.width = '100%';
+        });
+    
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            step2.style.display = 'none';
+            step1.style.display = 'block';
+            stepText.textContent = 'Étape 1 sur 2';
+            progressFill.style.width = '50%';
+        });
+    </script>
+    
+    <script>
+        const countryCodes = {
+            'AF': '+93', 'AL': '+355', 'DZ': '+213', 'AD': '+376', 'AO': '+244', 'AR': '+54', 'AM': '+374',
+            'AU': '+61', 'AT': '+43', 'AZ': '+994', 'BS': '+1-242', 'BH': '+973', 'BD': '+880', 'BB': '+1-246',
+            'BY': '+375', 'BE': '+32', 'BZ': '+501', 'BJ': '+229', 'BT': '+975', 'BO': '+591', 'BA': '+387',
+            'BW': '+267', 'BR': '+55', 'BN': '+673', 'BG': '+359', 'BF': '+226', 'BI': '+257', 'KH': '+855',
+            'CM': '+237', 'CA': '+1', 'CV': '+238', 'KY': '+1-345', 'CF': '+236', 'TD': '+235', 'CL': '+56',
+            'CN': '+86', 'CO': '+57', 'KM': '+269', 'CG': '+242', 'CD': '+243', 'CR': '+506', 'CU': '+53',
+            'CY': '+357', 'CZ': '+420', 'DK': '+45', 'DJ': '+253', 'DM': '+1-767', 'DO': '+1-809', 'EC': '+593',
+            'EG': '+20', 'SV': '+503', 'GQ': '+240', 'ER': '+291', 'EE': '+372', 'ET': '+251', 'FJ': '+679',
+            'FI': '+358', 'FR': '+33', 'GA': '+241', 'GM': '+220', 'GE': '+995', 'DE': '+49', 'GH': '+233',
+            'GR': '+30', 'GD': '+1-473', 'GT': '+502', 'GN': '+224', 'GW': '+245', 'GY': '+595', 'HT': '+509',
+            'HN': '+504', 'HK': '+852', 'HU': '+36', 'IS': '+354', 'IN': '+91', 'ID': '+62', 'IR': '+98',
+            'IQ': '+964', 'IE': '+353', 'IL': '+972', 'IT': '+39', 'JM': '+1-876', 'JP': '+81', 'JO': '+962',
+            'KZ': '+7', 'KE': '+254', 'KI': '+686', 'KR': '+82', 'KW': '+965', 'KG': '+996', 'LA': '+856',
+            'LV': '+371', 'LB': '+961', 'LS': '+266', 'LR': '+231', 'LY': '+218', 'LI': '+423', 'LT': '+370',
+            'LU': '+352', 'MO': '+853', 'MK': '+389', 'MG': '+261', 'MW': '+265', 'MY': '+60', 'MV': '+960',
+            'ML': '+223', 'MT': '+356', 'MH': '+692', 'MQ': '+596', 'MR': '+222', 'MU': '+230', 'YT': '+262',
+            'MX': '+52', 'FM': '+691', 'MD': '+373', 'MC': '+377', 'MN': '+976', 'ME': '+382', 'MA': '+212',
+            'MZ': '+258', 'MM': '+95', 'NA': '+264', 'NR': '+674', 'NP': '+977', 'NL': '+31', 'NC': '+687',
+            'NZ': '+64', 'NI': '+505', 'NE': '+227', 'NG': '+234', 'NO': '+47', 'NP': '+977', 'OM': '+968',
+            'PK': '+92', 'PW': '+680', 'PA': '+507', 'PG': '+675', 'PY': '+595', 'PE': '+51', 'PH': '+63',
+            'PL': '+48', 'PT': '+351', 'PR': '+1-787', 'QA': '+974', 'RO': '+40', 'RU': '+7', 'RW': '+250',
+            'SA': '+966', 'SD': '+249', 'SN': '+221', 'SG': '+65', 'SK': '+421', 'SI': '+386', 'SO': '+252',
+            'ZA': '+27', 'ES': '+34', 'LK': '+94', 'SD': '+249', 'SR': '+597', 'SE': '+46', 'CH': '+41',
+            'SY': '+963', 'TW': '+886', 'TZ': '+255', 'TH': '+66', 'TG': '+228', 'TO': '+676', 'TT': '+1-868',
+            'TN': '+216', 'TR': '+90', 'TM': '+993', 'UG': '+256', 'UA': '+380', 'AE': '+971', 'GB': '+44',
+            'US': '+1', 'UY': '+598', 'UZ': '+998', 'VU': '+678', 'VE': '+58', 'VN': '+84', 'YE': '+967',
+            'ZM': '+260', 'ZW': '+263'
+        };
+    
+        const countrySelect = document.getElementById('id_pays');
+        const phoneNumberInput = document.getElementById('id_telephone');
+    
+        countrySelect.addEventListener('change', function() {
+            const selectedCountry = countrySelect.value;
+            const code_country = countryCodes[selectedCountry];
+            if (code_country) {
+                phoneNumberInput.value = code_country;  // Met à jour le champ du numéro avec l'indicatif
+            }
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.confirm-action').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('form');
+                const message = form.getAttribute('data-message');
+    
+                Swal.fire({
+                    title: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, archiver',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.confirm-action').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('form');
+                const message = form.getAttribute('data-message');
+    
+                Swal.fire({
+                    title: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, archiver',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        function toggleTables() {
+            const nonArchives = document.getElementById("medecins-non-archives");
+            const archives = document.getElementById("medecins-archives");
+        
+            if (nonArchives.style.display !== "none") {
+                nonArchives.style.display = "none";
+                archives.style.display = "block";
+            } else {
+                nonArchives.style.display = "block";
+                archives.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        function toggleTables() {
+            const nonArchives = document.getElementById("medecins-non-archives");
+            const archives = document.getElementById("medecins-archives");
+            const btnRetour = document.getElementById("btn-retour");
+            const btnArchive = document.querySelector(".btn-archive").parentElement;
+        
+            if (nonArchives.style.display !== "none") {
+                // Cacher la table des non-archivés et afficher les archivés
+                nonArchives.style.display = "none";
+                archives.style.display = "block";
+                btnRetour.style.display = "block";
+                btnArchive.style.display = "none";
+            } else {
+                // Cacher les archivés et revenir à la liste normale
+                nonArchives.style.display = "block";
+                archives.style.display = "none";
+                btnRetour.style.display = "none";
+                btnArchive.style.display = "block";
+            }
+        }
+        </script>
+        
+        
+    
+    
+
+    {% include "Structure/section/script.html" %}
+</body>
+</html>

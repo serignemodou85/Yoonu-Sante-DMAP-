@@ -1,0 +1,29 @@
+{% load static %}
+{% include "Administrateur/section1/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+      {% include "Administrateur/section1/header.html" %}
+      {% include "Administrateur/section1/menugauche.html" %}
+
+      <!-- CONTENUE -->
+      <div class="content-wrapper">
+        <section class="content-header">
+          <h1>
+            Accueil
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'administrateur_page'%}"><i class="fa fa-dashboard"></i>Acceuil</a></li>
+          </ol>
+        </section>
+        <section class="content">
+                
+        </section>
+      </div>
+      <!--End Contenue -->
+
+      {% include "Administrateur/section1/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Administrateur/section1/script.html" %}
+
+  </body>
+</html>

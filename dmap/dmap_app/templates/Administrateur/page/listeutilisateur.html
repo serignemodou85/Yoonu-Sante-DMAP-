@@ -1,0 +1,784 @@
+{% load static %}
+{% include "Administrateur/section/head.html" %}
+<body class="skin-blue">
+<div class="wrapper"> 
+    {% include "Administrateur/section/header.html" %}
+    {% include "Administrateur/section/menugauche.html" %}
+
+    <!-- Contenu -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Liste des Utilisateurs</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                <li><a href="#"><i class="fa fa-users"></i> Liste des Utilisateurs</a></li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Liste des Utilisateurs</h3>
+                        </div> 
+                        <div class="box-body">
+                            <div class="box-header" style="display: flex; justify-content: flex-end; gap: 10px;">                                          
+                                <h3 class="box-title">
+                                    <a href="#" class="btn btn-archive" onclick="showTables('bloquer'); return false;">
+                                        <span id="btn-toggle-bloquer-bloquer">
+                                            <i class="fa fa-folder"></i> Utilisateur bloquer
+                                        </span>
+                                    </a>
+                                </h3>                                  
+                                <h3 class="box-title" id="btn-retour" style="display: none; font-size: 12px; margin-top: 12px;">
+                                    <a href="#" onclick="showTables('retour'); return false;">
+                                        <span id="btn-toggle-bloquer-retour">
+                                            <i class="fa fa-arrow-left"></i> Retour
+                                        </span>
+                                    </a>
+                                </h3>                            
+                            </div>
+                            
+
+                            <div id="section-liste">
+                                <!-- Boutons de filtre avec icônes -->
+                                <div class="btn-group" style="margin: 15px 0;">
+                                    <button class="btn btn-primary btn-filtre active" data-target="medecin">
+                                        <i class="fas fa-user-md"></i> Médecins
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="patient">
+                                        <i class="fas fa-user-injured"></i> Patients
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="structure">
+                                        <i class="fas fa-hospital"></i> Structures
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="admin">
+                                        <i class="fas fa-hospital"></i> Administrateurs
+                                    </button>
+                                </div>
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <script>
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Succès',
+                                                text: '{{ message }}',
+                                                timer: 3000,
+                                                showConfirmButton: false
+                                            });
+                                        </script>
+                                    {% endfor %}
+                                {% endif %}      
+
+                                <!-- Table Médecins -->
+                                <table class="table table-bordered table-striped table-section" id="section-medecin">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Téléphone</th>
+                                            <th>Email</th>
+                                            <th>Sexe</th>
+                                            <th>Spécialité</th>
+                                            <th>Adresse</th>
+                                            <th>Actions</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for medecin in medecins %}
+                                            <tr>  
+                                                <td>
+                                                    {% if medecin.image %}
+                                                        <img src="{{ medecin.image.url }}" alt="Photo de {{ medecin.nom }}" style="width: 30px; height: 30px; object-fit: cover;">
+                                                    {% else %}
+                                                        Aucune image
+                                                    {% endif %}
+                                                </td>                                            
+                                                <td>{{ medecin.nom }}</td>
+                                                <td>{{ medecin.prenom }}</td>
+                                                <td>{{ medecin.telephone }}</td>
+                                                <td>{{ medecin.email }}</td>
+                                                <td>{{ medecin.sexe }}</td>
+                                                <td>{{ medecin.specialisation }}</td>
+                                                <td>{{ medecin.adresse }}</td>
+                                                <td>
+                                                    <!-- Bouton Voir -->
+                                                    <a href="#" class="btn btn-sm btn-info" title="Voir" 
+                                                       data-toggle="modal" data-target="#modalVoir{{ medecin.id }}" style="display:inline-block;">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                
+                        
+                                                
+                                                    <!-- Bouton Bloquer -->
+                                                    <form method="post" action="{% url 'bloquer_medecin_admin' medecin.id %}" class="bloquer-form" 
+                                                          data-message="Voulez-vous vraiment bloquer le médecin {{ medecin.nom }} {{ medecin.prenom }} ?"
+                                                          data-action-type="bloquer" 
+                                                          style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-danger confirm-action" title="Bloquer">
+                                                            <i class="fa fa-ban"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                
+                                                
+                                                                                                
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="8" class="text-center">Aucun médecin enregistré</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                
+                                <!-- Table Patients -->
+                                <table class="table table-bordered table-striped table-section" id="section-patient" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Téléphone</th>
+                                            <th>Email</th>
+                                            <th>Sexe</th>
+                                            <th>Adresse</th>
+                                            <th>Actions</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for patient in patients %}
+                                            <tr>  
+                                                <td>{{ patient.nom }}</td>
+                                                <td>{{ patient.prenom }}</td>
+                                                <td>{{ patient.telephone }}</td>
+                                                <td>{{ patient.email }}</td>
+                                                <td>{{ patient.sexe }}</td>
+                                                <td>{{ patient.adresse }}</td>
+                                                <td>
+                                                    <!-- Bouton Voir -->
+                                                    <a href="#" class="btn btn-sm btn-info" title="Voir" 
+                                                    data-toggle="modal" data-target="#modalVoir{{ patient.id }}" style="display:inline-block;">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                
+                                                    <!-- Bouton Archiver -->
+                                                    
+                                                    <form method="post" action="{% url 'bloquer_patient_admin' patient.id %}" class="bloquer-form" 
+                                                        data-message="Voulez-vous vraiment bloquer le médecin {{ patient.nom }} {{ patient.prenom }} ?"
+                                                        data-action-type="bloquer" 
+                                                        style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-danger confirm-action" title="Bloquer">
+                                                            <i class="fa fa-ban"></i>
+                                                        </button>                                                        
+                                                    </form>
+                                                </td>                                                
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="8" class="text-center">Aucun patient enregistré</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <!-- Table Structures -->
+                                <table class="table table-bordered table-striped table-section" id="section-structure" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>image</th>
+                                            <th>Nom</th>
+                                            <th>Type Structure</th>
+                                            <th>Adresse</th>
+                                            <th>Email</th>
+                                            <th>Ville</th>
+                                            <th>Telephone</th>
+                                            <th>Valider Par</th>
+                                            <th>Actions</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for structure in structures %}
+                                            <tr>  
+                                                <td>
+                                                    {% if structure.image %}
+                                                        <img src="{{ structure.image.url }}" alt="Image structure" width="50" height="50" style="object-fit: cover;">
+                                                    {% else %}
+                                                        <span class="text-muted">Aucune image</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ structure.nom }}</td>
+                                                <td>{{ structure.type_structure }}</td>
+                                                <td>{{ structure.adresse }}</td>
+                                                <td>{{ structure.email }}</td>
+                                                <td>{{ structure.ville }}</td>
+                                                <td>{{ structure.telephone }}</td>
+                                                <td>{{ structure.created_by }}</td>
+                                                <td>
+                                                    <!-- Bouton Voir -->
+                                                    <a href="#" class="btn btn-sm btn-info" title="Voir" 
+                                                    data-toggle="modal" data-target="#modalVoir{{ structure.id }}" style="display:inline-block;">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                
+                                                    
+                                                    <form method="post" action="{% url 'bloquer_structure_admin' structure.id %}" class="bloquer-form" 
+                                                        data-message="Voulez-vous vraiment bloquer le médecin {{ structure.nom }}?"
+                                                        data-action-type="bloquer" 
+                                                        style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-danger confirm-action" title="Bloquer">
+                                                            <i class="fa fa-ban"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>                                                
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="8" class="text-center">Aucune structure enregistrée</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>  
+
+                                <!-- Table Administrateur -->
+                                <table class="table table-bordered table-striped table-section" id="section-admin" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Téléphone</th>
+                                            <th>Email</th>
+                                            <th>Sexe</th>
+                                            <th>Actions</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for admin in administrateurs %}
+                                            <tr>  
+                                                <td>
+                                                    {% if admin.image %}
+                                                        <img src="{{ admin.image.url }}" alt="Photo de {{ admin.nom }}" style="width: 30px; height: 30px; object-fit: cover;">
+                                                    {% else %}
+                                                        Aucune image
+                                                    {% endif %}
+                                                </td>                                            
+                                                <td>{{ admin.nom }}</td>
+                                                <td>{{ admin.prenom }}</td>
+                                                <td>{{ admin.telephone }}</td>
+                                                <td>{{ admin.email }}</td>
+                                                <td>{{ admin.sexe }}</td>
+                                                <td>
+                                                    <!-- Bouton Voir -->
+                                                    <a href="#" class="btn btn-sm btn-info" title="Voir" 
+                                                    data-toggle="modal" data-target="#modalVoir{{ admin.id }}" style="display:inline-block;">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                
+                                                    
+                                                    <form method="post" action="{% url 'bloquer_admin' admin.id %}" class="bloquer-form" 
+                                                        data-message="Voulez-vous vraiment bloquer le médecin {{ admin.nom }}?"
+                                                        data-action-type="bloquer" 
+                                                        style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-danger confirm-action" title="Bloquer">
+                                                            <i class="fa fa-ban"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <a href="#" class="btn btn-info promouvoir-btn" data-url="{% url 'promouvoir_admin' admin.id %}">
+                                                        Promouvoir comme Super Admin
+                                                        <i class="fa fa-user-secret"></i>
+                                                    </a>                                                    
+                                                    
+                                                </td>
+                                                                                                
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="8" class="text-center">Aucun médecin enregistré</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div id="section-archive" style="display: none;">
+                                <!-- Boutons de filtre avec icônes -->
+                                <div class="btn-group" style="margin: 15px 0;">
+                                    <button class="btn btn-primary btn-filtre active" data-target="medecin-archive">
+                                        <i class="fas fa-user-md"></i> Médecins
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="patient-archive">
+                                        <i class="fas fa-user-injured"></i> Patients
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="admin-archive">
+                                        <i class="fas fa-hospital"></i> Structures
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="admin-archive">
+                                        <i class="fas fa-hospital"></i> Administrateurs
+                                    </button>
+                                </div>
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <script>
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Succès',
+                                                text: '{{ message }}',
+                                                timer: 3000,
+                                                showConfirmButton: false
+                                            });
+                                        </script>
+                                    {% endfor %}
+                                {% endif %}      
+
+                    
+                            </div>
+
+                            <div id="section-bloque" style="display: none;">
+                                <!-- Boutons de filtre avec icônes -->
+                                <div class="btn-group" style="margin: 15px 0;">
+                                    <button class="btn btn-primary btn-filtre active" data-target="medecin-bloquer">
+                                        <i class="fas fa-user-md"></i> Médecins
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="patient-bloquer">
+                                        <i class="fas fa-user-injured"></i> Patients
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="structure-bloquer">
+                                        <i class="fas fa-hospital"></i> Structures
+                                    </button>
+                                    <button class="btn btn-secondary btn-filtre" data-target="admin-bloquer">
+                                        <i class="fas fa-hospital"></i> Administrateurs
+                                    </button>
+                                </div>
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <script>
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Succès',
+                                                text: '{{ message }}',
+                                                timer: 3000,
+                                                showConfirmButton: false
+                                            });
+                                        </script>
+                                    {% endfor %}
+                                {% endif %}      
+
+                                <!-- Table Médecins -->
+                                <table class="table table-bordered table-striped table-section" id="section-medecin-bloquer">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Téléphone</th>
+                                            <th>Email</th>
+                                            <th>Sexe</th>
+                                            <th>Spécialité</th>
+                                            <th>Adresse</th>
+                                            <th>Actions</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for medecin in medecins_bloque %}
+                                            <tr>  
+                                                <td>
+                                                    {% if medecin.image %}
+                                                        <img src="{{ medecin.image.url }}" alt="Photo de {{ medecin.nom }}" style="width: 30px; height: 30px; object-fit: cover;">
+                                                    {% else %}
+                                                        Aucune image
+                                                    {% endif %}
+                                                </td>                                            
+                                                <td>{{ medecin.nom }}</td>
+                                                <td>{{ medecin.prenom }}</td>
+                                                <td>{{ medecin.telephone }}</td>
+                                                <td>{{ medecin.email }}</td>
+                                                <td>{{ medecin.sexe }}</td>
+                                                <td>{{ medecin.specialisation }}</td>
+                                                <td>{{ medecin.adresse }}</td>
+                                                <td>
+                                                    <form method="post" action="{% url 'debloquer_medecin_admin' medecin.id %}" class="archiver-form" 
+                                                        data-message="Voulez-vous vraiment debloquer le médecin {{ medecin.nom }} {{ medecin.prenom }} ?" 
+                                                        data-action-type="debloquer"
+                                                        style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-warning confirm-action" title="Debloquer">
+                                                            <i class="fa fa-undo"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                                                                
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="8" class="text-center">Aucun médecin enregistré</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                
+                                <!-- Table Patients -->
+                                <table class="table table-bordered table-striped table-section" id="section-patient-bloquer" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Téléphone</th>
+                                            <th>Email</th>
+                                            <th>Sexe</th>
+                                            <th>Adresse</th>
+                                            <th>Actions</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for patient in patients_bloque %}
+                                            <tr>  
+                                                <td>{{ patient.nom }}</td>
+                                                <td>{{ patient.prenom }}</td>
+                                                <td>{{ patient.telephone }}</td>
+                                                <td>{{ patient.email }}</td>
+                                                <td>{{ patient.sexe }}</td>
+                                                <td>{{ patient.adresse }}</td>
+                                                <td>
+                                                    <!-- Bouton Archiver -->
+                                                    <form method="post" action="{% url 'debloquer_patient_admin' patient.id %}" class="archiver-form" 
+                                                        data-message="Voulez-vous vraiment debloquer le patient {{ patient.nom }} {{ patient.prenom }} ?" 
+                                                        data-action-type="debloquer"
+                                                        style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-danger confirm-action" title="Debloquer">
+                                                            <i class="fa fa-archive"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>                                                
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="8" class="text-center">Aucun patient enregistré</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <!-- Table Structures -->
+                                <table class="table table-bordered table-striped table-section" id="section-structure-bloquer" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>image</th>
+                                            <th>Nom</th>
+                                            <th>Type Structure</th>
+                                            <th>Adresse</th>
+                                            <th>Email</th>
+                                            <th>Ville</th>
+                                            <th>Telephone</th>
+                                            <th>Valider Par</th>
+                                            <th>Actions</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for structure in structures_bloque %}
+                                            <tr>  
+                                                <td>
+                                                    {% if structure.image %}
+                                                        <img src="{{ structure.image.url }}" alt="Image structure" width="50" height="50" style="object-fit: cover;">
+                                                    {% else %}
+                                                        <span class="text-muted">Aucune image</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ structure.nom }}</td>
+                                                <td>{{ structure.type_structure }}</td>
+                                                <td>{{ structure.adresse }}</td>
+                                                <td>{{ structure.email }}</td>
+                                                <td>{{ structure.ville }}</td>
+                                                <td>{{ structure.telephone }}</td>
+                                                <td>{{ structure.created_by }}</td>
+                                                <td>
+                                                    <!-- Bouton Archiver -->
+                                                    <form method="post" action="{% url 'debloquer_structure_admin' structure.id %}" class="archiver-form" 
+                                                        data-message="Voulez-vous vraiment debloquer le structure {{ structure.nom }} {{ structure.email }} ?" 
+                                                        data-action-type="debloquer"
+                                                        style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-danger confirm-action" title="Debloquer">
+                                                            <i class="fa fa-archive"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>                                                
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="8" class="text-center">Aucune structure enregistrée</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>  
+
+                                <!-- Table Administrateur -->
+                                <table class="table table-bordered table-striped table-section" id="section-admin-bloquer" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Téléphone</th>
+                                            <th>Email</th>
+                                            <th>Sexe</th>
+                                            <th>Actions</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for admin in administrateurs_bloque %}
+                                            <tr>  
+                                                <td>
+                                                    {% if admin.image %}
+                                                        <img src="{{ admin.image.url }}" alt="Photo de {{ admin.nom }}" style="width: 30px; height: 30px; object-fit: cover;">
+                                                    {% else %}
+                                                        Aucune image
+                                                    {% endif %}
+                                                </td>                                            
+                                                <td>{{ admin.nom }}</td>
+                                                <td>{{ admin.prenom }}</td>
+                                                <td>{{ admin.telephone }}</td>
+                                                <td>{{ admin.email }}</td>
+                                                <td>{{ admin.sexe }}</td>
+                                                <td>
+                                                    <!-- Bouton Voir -->
+                                                    <a href="#" class="btn btn-sm btn-info" title="Voir" 
+                                                    data-toggle="modal" data-target="#modalVoir{{ admin.id }}" style="display:inline-block;">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                
+                                                    <!-- Bouton Archiver -->
+                                                    <form method="post" action="{% url 'debloquer_admin' admin.id %}" class="archiver-form" 
+                                                        data-message="Voulez-vous vraiment debloquer l'admin {{ admin.prenom }} {{ admin.nom }} ?" 
+                                                        data-action-type="debloquer"
+                                                        style="display:inline-block; margin-left:5px;">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-danger confirm-action" title="Debloquer">
+                                                            <i class="fa fa-archive"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                                                                
+                                            </tr>
+                                        {% empty %}
+                                            <tr><td colspan="8" class="text-center">Aucun médecin enregistré</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section>
+    </div>
+    <!-- End Contenu -->
+    {% for medecin in medecins %}
+        <div class="modal fade" id="modalVoir{{ medecin.id }}" tabindex="-1" role="dialog" aria-labelledby="modalVoirLabel{{ medecin.id }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-info">
+                        <h4 class="modal-title" id="modalVoirLabel{{ medecin.id }}">Détails du Médecin</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nom :</strong> {{ medecin.nom }}</p>
+                        <p><strong>Prénom :</strong> {{ medecin.prenom }}</p>
+                        <p><strong>Téléphone :</strong> {{ medecin.telephone }}</p>
+                        <p><strong>Email :</strong> {{ medecin.email }}</p>
+                        <p><strong>Sexe :</strong> {{ medecin.sexe }}</p>
+                        <p><strong>Spécialité :</strong> {{ medecin.specialisation }}</p>
+                        <p><strong>Adresse :</strong> {{ medecin.adresse }}</p>
+                        <p><strong>Archivé :</strong> {{ medecin.archiver|yesno:"Oui,Non" }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% for patient in patients %}
+        <div class="modal fade" id="modalVoir{{ patient.id }}" tabindex="-1" role="dialog" aria-labelledby="modalVoirLabel{{ medecin.id }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-info">
+                        <h4 class="modal-title" id="modalVoirLabel{{ medecin.id }}">Détails du Patient</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nom :</strong> {{ patient.nom }}</p>
+                        <p><strong>Prénom :</strong> {{ patient.prenom }}</p>
+                        <p><strong>Téléphone :</strong> {{ patient.telephone }}</p>
+                        <p><strong>Email :</strong> {{ patient.email }}</p>
+                        <p><strong>Sexe :</strong> {{ patient.sexe }}</p>
+                        <p><strong>Adresse :</strong> {{ patient.adresse }}</p>
+                        <p><strong>Archivé :</strong> {{ patient.archiver|yesno:"Oui,Non" }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% for structure in structures %}
+        <div class="modal fade" id="modalVoir{{ structure.id }}" tabindex="-1" role="dialog" aria-labelledby="modalVoirLabel{{ medecin.id }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-info">
+                        <h4 class="modal-title" id="modalVoirLabel{{ medecin.id }}">Détails du Structure</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nom :</strong> {{ structure.nom }}</p>
+                        <p><strong>Type Structure :</strong> {{ structure.type_structure }}</p>
+                        <p><strong>Téléphone :</strong> {{ structure.telephone }}</p>
+                        <p><strong>Email :</strong> {{ structure.email }}</p>
+                        <p><strong>Date Inscription :</strong> {{ structure.date_inscription }}</p>
+                        <p><strong>Adresse :</strong> {{ structure.adresse }}</p>
+                        <p><strong>Region :</strong> {{ structure.region}}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% for admin in administrateurs %}
+        <div class="modal fade" id="modalVoir{{ admin.id }}" tabindex="-1" role="dialog" aria-labelledby="modalVoirLabel{{ medecin.id }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-info">
+                        <h4 class="modal-title" id="modalVoirLabel{{ medecin.id }}">Détails de l'administrateur</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nom :</strong> {{ admin.nom }}</p>
+                        <p><strong>Prenom :</strong> {{ admin.prenom }}</p>
+                        <p><strong>Telephone :</strong> {{ admin.telephone }}</p>
+                        <p><strong>Email :</strong> {{ admin.email }}</p>
+                        <p><strong>Adresse :</strong> {{ admin.adresse }}</p>
+                        <p><strong>Sexe :</strong> {{ admin.sexe }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
+    {% include "Administrateur/section/footer.html" %}
+</div><!-- ./wrapper -->
+{% include "Administrateur/section/script.html" %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $(".btn-filtre").click(function(){
+            var target = $(this).data("target");
+
+            // Réinitialiser les styles des boutons
+            $(".btn-filtre").removeClass("btn-primary active").addClass("btn-secondary");
+
+            // Appliquer le style au bouton cliqué
+            $(this).removeClass("btn-secondary").addClass("btn-primary active");
+
+            // Masquer toutes les tables et afficher celle sélectionnée
+            $(".table-section").hide();
+            $("#section-" + target).fadeIn();
+        });
+    });
+</script>
+
+<script>
+    document.querySelectorAll('.confirm-action').forEach(button => {
+        button.addEventListener('click', function () {
+            const form = this.closest('form');
+            const message = form.getAttribute('data-message');
+            const actionType = form.getAttribute('data-action-type'); // Peut être : archiver, désarchiver, bloquer, débloquer
+
+            let confirmText = 'Oui, continuer';
+
+            switch (actionType) {
+                case 'archiver':
+                    confirmText = 'Oui, archiver';
+                    break;
+                case 'desarchiver':
+                    confirmText = 'Oui, désarchiver';
+                    break;
+                case 'bloquer':
+                    confirmText = 'Oui, bloquer';
+                    break;
+                case 'debloquer':
+                    confirmText = 'Oui, débloquer';
+                    break;
+            }
+
+            Swal.fire({
+                title: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: confirmText,
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    function showTables(action) {
+        const sectionListe = document.getElementById("section-liste");
+        const sectionArchive = document.getElementById("section-archive");
+        const sectionBloque = document.getElementById("section-bloque");
+        const btnRetour = document.getElementById("btn-retour");
+
+        if (action === 'archiver') {
+            sectionListe.style.display = "none";
+            sectionArchive.style.display = "block";
+            sectionBloque.style.display = "none"; // ne pas afficher les bloqués en même temps
+            btnRetour.style.display = "block";  
+        } else if (action === 'bloquer') {
+            sectionListe.style.display = "none";
+            sectionArchive.style.display = "none";
+            sectionBloque.style.display = "block";
+            btnRetour.style.display = "block";  
+        } else if (action === 'retour') {
+            sectionListe.style.display = "block";
+            sectionArchive.style.display = "none";
+            sectionBloque.style.display = "none";
+            btnRetour.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.promouvoir-btn').click(function(e) {
+            e.preventDefault(); // Empêche la redirection immédiate
+
+            const url = $(this).data('url'); // Récupère l'URL dans data-url
+
+            Swal.fire({
+                title: 'Êtes-vous sûr ?',
+                text: "Voulez-vous définir cet admin comme Super Admin ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui, confirmer',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url; // Redirection si confirmé
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

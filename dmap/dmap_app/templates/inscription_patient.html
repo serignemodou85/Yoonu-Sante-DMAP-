@@ -1,0 +1,430 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscription Patient | YOONU SANTE</title>
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+  
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css" rel="stylesheet" />
+  
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.0/dist/sweetalert2.min.css">
+  
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --secondary-color: #1a5276;
+      --accent-color: #e74c3c;
+      --light-color: #f8f9fa;
+      --dark-color: #2c3e50;
+      --success-color: #28a745;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      min-height: 100vh;
+    }
+    
+    .auth-card {
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      border: none;
+    }
+    
+    .auth-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .auth-title {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    
+    .auth-image {
+      max-height: 400px;
+      object-fit: contain;
+    }
+    
+    .form-outline .form-control:focus ~ .form-label,
+    .form-floating>.form-control:focus~label,
+    .form-floating>.form-select:focus~label {
+      color: var(--primary-color);
+    }
+    
+    .form-outline .form-control:focus ~ .form-notch .form-notch-leading,
+    .form-outline .form-control:focus ~ .form-notch .form-notch-middle,
+    .form-outline .form-control:focus ~ .form-notch .form-notch-trailing,
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color) !important;
+      box-shadow: 0 0 0 0.25rem rgba(58, 134, 255, 0.25);
+    }
+    
+    .btn-auth {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      border: none;
+      padding: 12px 30px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s;
+      background-size: 200% auto;
+      color: white;
+    }
+    
+    .btn-auth:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3);
+      background-position: right center;
+      color: white;
+    }
+    
+    .back-to-login {
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color 0.3s;
+      font-weight: 500;
+    }
+    
+    .back-to-login:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+    
+    .form-floating>label {
+      padding: 1rem 0.75rem;
+    }
+    
+    .form-section {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section-title {
+      color: var(--secondary-color);
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .section-title i {
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6c757d;
+      z-index: 5;
+    }
+    
+    .password-toggle:hover {
+      color: var(--primary-color);
+    }
+    
+    .file-upload {
+      position: relative;
+      overflow: hidden;
+      border: 2px dashed #ced4da;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .file-upload:hover {
+      border-color: var(--primary-color);
+      background-color: rgba(58, 134, 255, 0.05);
+    }
+    
+    .file-upload-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .file-upload-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+    }
+    
+    .file-upload-label i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+    
+    .file-upload-name {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--dark-color);
+      word-break: break-all;
+    }
+    
+    @media (max-width: 992px) {
+      .auth-image-container {
+        order: -1;
+        padding-bottom: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="vh-100 d-flex align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="card auth-card">
+            <div class="row g-0">
+              <div class="col-lg-6 d-flex flex-column">
+                <div class="auth-header">
+                  <h2 class="auth-title mb-3">
+                    <i class="fas fa-user-plus me-2"></i> Inscription Patient
+                  </h2>
+                  <p class="mb-0">Créez votre compte pour accéder à nos services</p>
+                </div>
+                
+                <div class="card-body p-4 p-lg-5">
+                  {% if messages %}
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script>
+                      document.addEventListener('DOMContentLoaded', function() {
+                        {% for message in messages %}
+                        Swal.fire({
+                          position: 'top-end',
+                          icon: '{% if "error" in message.tags %}error{% elif "success" in message.tags %}success{% else %}info{% endif %}',
+                          title: '{{ message }}',
+                          showConfirmButton: false,
+                          timer: 3000,
+                          backdrop: false,
+                          width: '400px'
+                        });
+                        {% endfor %}
+                      });
+                    </script>
+                  {% endif %}
+
+                  <form method="POST" action="{% url 'inscription_patient' %}" enctype="multipart/form-data" id="patientForm">
+                    {% csrf_token %}
+                    
+                    <div class="form-section">
+                      <h5 class="section-title">
+                        <i class="fas fa-id-card"></i> Informations personnelles
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <div class="form-floating">
+                            <input type="text" name="nom" class="form-control" id="patientNom" placeholder="Nom" required>
+                            <label for="patientNom">Nom</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-floating">
+                            <input type="text" name="prenom" class="form-control" id="patientPrenom" placeholder="Prénom" required>
+                            <label for="patientPrenom">Prénom</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-floating">
+                            <select name="sexe" class="form-select" id="patientSexe" required>
+                              <option value="" disabled selected>Sélectionnez</option>
+                              <option value="H">Homme</option>
+                              <option value="F">Femme</option>
+                            </select>
+                            <label for="patientSexe">Sexe</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-floating">
+                            <input type="date" name="date_naissance" class="form-control" id="patientDateNaissance" required>
+                            <label for="patientDateNaissance">Date de naissance</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-section">
+                      <h5 class="section-title">
+                        <i class="fas fa-address-book"></i> Coordonnées
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-12">
+                          <div class="form-floating">
+                            <input type="text" name="adresse" class="form-control" id="patientAdresse" placeholder="Adresse complète" required>
+                            <label for="patientAdresse">Adresse complète</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-floating">
+                            <input type="tel" name="telephone" class="form-control" id="patientTelephone" placeholder="Téléphone" required>
+                            <label for="patientTelephone">Téléphone</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-floating">
+                            <input type="email" name="email" class="form-control" id="patientEmail" placeholder="Email" required>
+                            <label for="patientEmail">Email</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-section">
+                      <h5 class="section-title">
+                        <i class="fas fa-lock"></i> Sécurité
+                      </h5>
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <div class="form-floating position-relative">
+                            <input type="password" name="password" class="form-control" id="patientPassword" placeholder="Mot de passe" required>
+                            <label for="patientPassword">Mot de passe</label>
+                            <i class="far fa-eye password-toggle" id="togglePassword"></i>
+                          </div>
+                          <div class="form-text">Minimum 8 caractères</div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-floating position-relative">
+                            <input type="password" name="confirm_password" class="form-control" id="patientConfirmPassword" placeholder="Confirmer mot de passe" required>
+                            <label for="patientConfirmPassword">Confirmer mot de passe</label>
+                            <i class="far fa-eye password-toggle" id="toggleConfirmPassword"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-section mb-4">
+                      <h5 class="section-title">
+                        <i class="fas fa-camera"></i> Photo de profil
+                      </h5>
+                      <div class="file-upload">
+                        <input type="file" name="image" class="file-upload-input" id="patientImage" accept="image/*">
+                        <label for="patientImage" class="file-upload-label">
+                          <i class="fas fa-cloud-upload-alt"></i>
+                          <span>Cliquez pour télécharger une photo</span>
+                          <small class="text-muted">Formats acceptés: JPG, PNG (max 2MB)</small>
+                        </label>
+                        <div class="file-upload-name" id="fileName"></div>
+                      </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                      <button type="submit" class="btn btn-auth btn-lg">
+                        <i class="fas fa-user-plus me-2"></i> S'inscrire
+                      </button>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                      <a href="{% url 'user_login' %}" class="back-to-login">
+                        <i class="fas fa-sign-in-alt me-1"></i> Déjà un compte? Connectez-vous
+                      </a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              
+              <div class="col-lg-6 auth-image-container d-flex align-items-center justify-content-center p-5 bg-light">
+                <img src="{% static 'logo.jpg' %}" class="auth-image w-100" alt="Inscription Patient" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MDB JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.js"></script>
+  
+  <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <script>
+    // Afficher le nom du fichier sélectionné
+    document.getElementById('patientImage').addEventListener('change', function(e) {
+      const fileName = document.getElementById('fileName');
+      if (this.files.length > 0) {
+        fileName.textContent = this.files[0].name;
+      } else {
+        fileName.textContent = '';
+      }
+    });
+    
+    // Toggle password visibility
+    const togglePassword = document.querySelector('#togglePassword');
+    const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
+    const password = document.querySelector('#patientPassword');
+    const confirmPassword = document.querySelector('#patientConfirmPassword');
+    
+    if (togglePassword) {
+      togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+      });
+    }
+    
+    if (toggleConfirmPassword) {
+      toggleConfirmPassword.addEventListener('click', function() {
+        const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPassword.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+      });
+    }
+    
+    // Validation du formulaire
+    document.getElementById('patientForm').addEventListener('submit', function(e) {
+      const password = document.getElementById('patientPassword').value;
+      const confirmPassword = document.getElementById('patientConfirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        e.preventDefault();
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Les mots de passe ne correspondent pas',
+          confirmButtonColor: var(--primary-color)
+        });
+      }
+      
+      if (password.length < 8) {
+        e.preventDefault();
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Le mot de passe doit contenir au moins 8 caractères',
+          confirmButtonColor: var(--primary-color)
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% load static %}
+<aside class="main-sidebar">
+  <section class="sidebar">
+    <!-- Panneau utilisateur -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        {% with user.image.url as photo %}
+          <img src="{% if photo %}{{ photo }}{% else %}{% static 'img/photo-indisponible.webp' %}{% endif %}" 
+            alt="Admin" class="rounded-circle" width="150">
+        {% endwith %}
+      </div>
+      <div class="pull-left info">
+        <p>Dr {{full_name}}</p>
+        <a href="#"><i class="fa fa-circle text-success"></i> En Ligne</a>
+      </div>
+    </div>
+
+    <!-- Menu latéral -->
+    <ul class="sidebar-menu">
+      <li class="header">MENU MÉDECIN</li>
+    
+      <li class="{% if request.path == '/medecin/' %}active{% endif %}">
+        <a href="{% url 'medecin' %}">
+          <i class="fa fa-home"></i> <span>Accueil</span>
+        </a>
+      </li>
+    
+      <li class="{% if request.path == '/accederdossiermedical/' %}active{% endif %}">
+        <a href="{% url 'accederdossiermedical' %}">
+          <i class="fa fa-folder-open"></i> <span>Accéder à un Dossier Médical</span>
+        </a>
+      </li>
+    
+      <li class="{% if request.path == '/profil_medecin/' %}active{% endif %}">
+        <a href="{% url 'profil_medecin' %}">
+          <i class="fa fa-user-md"></i> <span>Gérer Profil</span>
+        </a>
+      </li>
+    
+      <li class="{% if request.path == '/notifications_medecin/' %}active{% endif %}">
+        <a href="{% url 'notifications_medecin' %}">
+          <i class="fa fa-bell"></i> <span>Notifications</span>
+        </a>
+      </li>
+    
+      <li>
+        <a href="javascript:void(0);" onclick="confirmLogout()">
+            <i class="fa fa-sign-out"></i> <span>Déconnexion</span>
+        </a>
+      </li>
+    </ul>
+    
+    
+  </section>
+</aside>

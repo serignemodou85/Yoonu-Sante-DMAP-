@@ -1,0 +1,34 @@
+{% load static %}
+{% include "Medecin/section/head.html" %}
+<body class="skin-blue">
+  <div class="wrapper"> 
+    {% include "Medecin/section/header.html" %}
+    {% include "Medecin/section/menugauche.html" %}
+
+    <!-- Contenue -->
+    <div class="content-wrapper">
+      
+
+      <section class="content">
+        <div class="row">
+            {% block content %}
+                <div class="container text-center mt-5">
+                    <div class="alert alert-danger">
+                        <h4>{{ message }}</h4>
+                        <a href="{% url 'medecin' %}" class="btn btn-primary mt-3">Retour au tableau de bord</a>
+                    </div>
+                </div>
+                {% endblock %}
+
+
+        </div>
+      </section>
+
+    </div>
+    <!--End Contenue -->
+
+    {% include "Medecin/section/footer.html" %}
+  </div><!-- ./wrapper -->
+  {% include "Medecin/section/script.html" %}
+</body>
+</html>

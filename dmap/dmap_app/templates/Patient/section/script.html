@@ -1,0 +1,114 @@
+{% load static %}
+
+<!-- jQuery 2.1.3 -->
+<script src="{% static 'patient/plugins/jQuery/jQuery-2.1.3.min.js' %}"></script>
+
+<!-- jQuery UI 1.11.2 -->
+<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+
+<!-- Résolution du conflit jQuery UI tooltip avec Bootstrap -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
+
+<!-- Bootstrap 3.3.2 JS -->
+<script src="{% static 'patient/bootstrap/js/bootstrap.min.js' %}"></script>
+
+{% if request.resolver_match.url_name != 'chatbot' %}
+<!-- Morris.js charts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="{% static 'patient/plugins/morris/morris.min.js' %}"></script>
+<!-- AdminLTE dashboard demo (facultatif) -->
+<script src="{% static 'patient/dist/js/pages/dashboard.js' %}"></script>
+{% endif %}
+
+<!-- Sparkline -->
+<script src="{% static 'patient/plugins/sparkline/jquery.sparkline.min.js' %}"></script>
+
+<!-- jvectormap -->
+<script src="{% static 'patient/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+<script src="{% static 'patient/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+
+<!-- jQuery Knob Chart -->
+<script src="{% static 'patient/plugins/knob/jquery.knob.js' %}"></script>
+
+<!-- daterangepicker -->
+<script src="{% static 'patient/plugins/daterangepicker/daterangepicker.js' %}"></script>
+
+<!-- datepicker -->
+<script src="{% static 'patient/plugins/datepicker/bootstrap-datepicker.js' %}"></script>
+
+<!-- Bootstrap WYSIHTML5 -->
+<script src="{% static 'patient/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js' %}"></script>
+
+<!-- iCheck -->
+<script src="{% static 'patient/plugins/iCheck/icheck.min.js' %}"></script>
+
+<!-- SlimScroll -->
+<script src="{% static 'patient/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+
+<!-- FastClick -->
+<script src="{% static 'patient/plugins/fastclick/fastclick.min.js' %}"></script>
+
+<!-- AdminLTE App -->
+<script src="{% static 'patient/dist/js/app.min.js' %}"></script>
+
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'patient/dist/js/demo.js' %}"></script>
+
+<!-- DataTables -->
+<script src="{% static 'patient/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'patient/plugins/datatables/dataTables.bootstrap.js' %}"></script>
+
+<!-- Initialisation des DataTables -->
+<script>
+  $(function () {
+    $("#example1").dataTable();
+    $('#example2').dataTable({
+      "bPaginate": true,
+      "bLengthChange": false,
+      "bFilter": false,
+      "bSort": true,
+      "bInfo": true,
+      "bAutoWidth": false
+    });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    {% if messages %}
+        {% for message in messages %}
+            Swal.fire({
+                icon: '{{ message.tags|default:"info" }}',
+                title: '{{ message.tags|default:"Message"|title }}',
+                text: '{{ message|escapejs }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        {% endfor %}
+    {% endif %}
+});
+</script>
+
+<script>
+  function confirmLogout() {
+      Swal.fire({
+          title: 'Voulez-vous vraiment vous déconnecter ?',
+          text: "Vous serez déconnecté de votre compte.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Oui, déconnectez-moi!',
+          cancelButtonText: 'Annuler'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              // Rediriger vers la vue de déconnexion
+              window.location.href = "{% url 'logout' %}";
+          }
+      });
+  }
+</script>

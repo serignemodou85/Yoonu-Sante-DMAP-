@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>PrimeCar - Location de Voiture</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'index/img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'index/lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'index/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'index/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'index/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'index/css/style.css' %}" rel="stylesheet">
+    
+    <!-- Ajouter ces liens dans la section <head> de ton template -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+    <style>
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+        .h-custom {
+            height: calc(100% - 73px);
+        }
+        @media (max-width: 450px) {
+            .h-custom {
+                height: 100%;
+            }
+        }
+        /* Bordure verte (ou bleue) quand l'entrée est valide */
+input.is-valid {
+    border-color: #28a745; /* Vert */
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.2); /* Ombre verte */
+}
+
+/* Bordure rouge quand l'entrée est invalide */
+input.is-invalid {
+    border-color: #dc3545; /* Rouge */
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.2); /* Ombre rouge */
+}
+
+/* Message d'erreur en rouge */
+.is-invalid + .invalid-feedback {
+    color: #dc3545;
+}
+.is-invalid{
+    color: red;
+}
+
+#error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Animation pour l'apparition du message */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Disparition automatique du message après 5 secondes */
+#error.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h2 class="m-0 text-primary"><i class="fa fa-car me-3"></i>PrimeCar</h2>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="{% url 'index' %}" class="nav-item nav-link active">Accueil</a>
+                <a href="{% url 'index' %}" class="nav-item nav-link">A Propos</a>
+                <a href="{% url 'index' %}" class="nav-item nav-link">Nos Vehicules</a>
+                <a href="{% url 'index' %}" class="nav-item nav-link">Contact</a>
+            </div>
+            <a href="{% url 'login' %}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Se Connecter<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
+    </nav>
+    <!-- END HEADER -->
+
+    <section class="vh-100">
+        <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                    <img src="{% static 'index/img/login.jpeg' %}"
+                        class="img-fluid" alt="Sample image">
+                </div>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                    {% for messages in message%}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                    <form method="POST" action="{% url 'store' %}" id="form" name="form">
+                        {% csrf_token %}
+                        <div class="divider d-flex align-items-center my-4">
+                            <p class="text-center fw-bold mx-3 mb-0">Se Connecter</p>
+                        </div>
+                    
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="email">Adresse Email</label>
+                            <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Entrer votre adresse Email" required />
+                            <p class="is-invalid"></p>
+                        </div>
+                    
+                        <!-- Password input -->
+                        <div class="form-outline mb-3">
+                            <label class="form-label" for="password">Mots de Passe</label>
+                            <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Enter votre Mots de Passe" required />
+                            <p class="is-invalid"></p> <!-- Message d'erreur pour le mot de passe -->
+                        </div>
+                    
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- Checkbox -->
+                            <div class="form-check mb-0">
+                                <input class="form-check-input me-2" type="checkbox" value="" id="rememberMe" />
+                                <label class="form-check-label" for="rememberMe">
+                                    Se souvenir de moi
+                                </label>
+                                <!-- Lien pour ouvrir le modal -->
+                                <label class="form-check-label" for="rememberMe">
+                                    <a href="{% url 'inscription' %}" class="text-body">S'inscrire !!</a>
+                                </label>
+
+                            </div>
+                            <a href="#!" class="text-body">Mots de Passe Oublie ?</a>
+                        </div>
+                        <!-- Afficher l'erreur si elle est présente -->
+                        {% if error_message %}
+                            <p id="error" style="color: red;">{{ error_message }}</p>
+                        {% endif %}
+                    
+                        <div class="text-center text-lg-start mt-4 pt-2">
+                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;" disabled>Se Connecter</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'index/lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'index/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'index/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'index/lib/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'index/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'index/lib/tempusdominus/js/moment.min.js' %}"></script>
+    <script src="{% static 'index/lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
+    <script src="{% static 'index/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'index/js/main.js' %}"></script>
+    <script src="{% static 'index/js/users/login.js' %}" type="text/javascript"></script>
+
+    <script>
+        // Fonction pour cacher le message d'erreur après 5 secondes
+        setTimeout(function() {
+            var errorElement = document.getElementById('error');
+            if (errorElement) {
+                errorElement.classList.add('fade-out');
+            }
+        }, 7000);
+    
+        // Fonction pour fermer le message d'erreur au clic
+        document.addEventListener('DOMContentLoaded', function() {
+            var errorElement = document.getElementById('error');
+            if (errorElement) {
+                errorElement.addEventListener('click', function() {
+                    errorElement.classList.add('fade-out');
+                });
+            }
+        });
+    </script>
+    
+    
+  
+</body>
+
+</html>

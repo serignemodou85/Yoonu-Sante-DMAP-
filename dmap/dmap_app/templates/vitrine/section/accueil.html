@@ -1,0 +1,71 @@
+{% load static %}
+<section id="hero" class="hero section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row align-items-center mb-5">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <div class="badge-wrapper mb-3">
+          <div class="d-inline-flex align-items-center rounded-pill border border-accent-light">
+            <div class="icon-circle me-2">
+              <i class="bi bi-bell-fill"></i>
+            </div>
+            <span class="badge-text me-3">Solution innovante</span>
+          </div>
+        </div>
+        <h1 class="hero-title mb-4">Des solutions e-santé pour transformer votre parcours de soins.</h1>
+        <p class="hero-description mb-4">Un système personnalisable, facile à déployer et intuitif à utiliser pour les professionnels comme pour les patients.</p>
+        <div class="cta-wrapper">
+          <a href="#services" class="btn btn-primary">En savoir plus</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-image">
+          <img src="{% static 'vitrine/assets/img/test.png' %}" 
+               alt="Solutions e-santé innovantes" 
+               class="img-fluid" 
+               loading="lazy"
+               style="width: 400px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); object-fit: cover;">
+        </div>
+      </div>
+    </div>
+
+    <div class="row feature-boxes">
+      <div class="col-lg-4 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-box">
+          <div class="feature-icon me-sm-4 mb-3 mb-sm-0">
+            <i class="bi bi-heart-pulse-fill"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Simplifiez votre parcours de soin</h3>
+            <p class="feature-text">Vous êtes un patient ? Gérez votre santé en ligne avec notre application. Tout devient plus simple et sécurisé.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-box">
+          <div class="feature-icon me-sm-4 mb-3 mb-sm-0">
+            <i class="bi bi-hospital-fill"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Gérez votre hôpital en un clic</h3>
+            <p class="feature-text">Vous êtes un professionnel de la santé ? Optimisez la gestion de votre établissement grâce à notre solution digitale : gestion patient.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-box">
+          <div class="feature-icon me-sm-4 mb-3 mb-sm-0">
+            <i class="bi bi-headset-vr"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Assistance sur mesure</h3>
+            <p class="feature-text">Profitez d’un support expert, disponible 24h/24 et 7j/7, pour vous accompagner à chaque étape et garantir le bon fonctionnement de vos services.</p>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

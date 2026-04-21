@@ -1,0 +1,194 @@
+ 
+      .main-body {
+        padding: 15px;
+    }
+    .card {
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+    }
+    
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+    }
+    
+    .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1rem;
+    }
+    
+    .gutters-sm {
+        margin-right: -8px;
+        margin-left: -8px;
+    }
+    
+    .gutters-sm>.col, .gutters-sm>[class*=col-] {
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+    .mb-3, .my-3 {
+        margin-bottom: 1rem!important;
+    }
+    
+    .bg-gray-300 {
+        background-color: #e2e8f0;
+    }
+    .h-100 {
+        height: 100%!important;
+    }
+    .shadow-none {
+        box-shadow: none!important;
+    }
+    #map {
+      height: 700px;
+      width: 100%;
+  }
+   /* Ajouter des marges et paddings autour des éléments */
+.text-center {
+  margin-bottom: 30px;
+}
+
+.identifiant-display {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Conteneur du QR Code */
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.qr-code-box {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code-title {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.qr-code-img {
+  border-radius: 10px;
+  border: 2px solid #4CAF50;
+  padding: 8px;
+  background-color: white;
+  max-width: 50%;
+  height: auto;
+}
+
+.qr-code-description {
+  margin-top: 15px;
+  color: #555;
+}
+
+.qr-code-note {
+  font-size: 12px;
+  color: #888;
+  margin-top: 15px;
+}
+
+/* Bouton d'action */
+.btn-warning {
+  font-weight: 600;
+  padding: 10px 20px;
+  margin-top: 15px;
+}
+
+/* Espacer les boutons */
+.box-header h3 a {
+  margin-right: 10px;
+}
+
+/* Responsivité : Pour que le QR code et autres éléments s'ajustent sur petits écrans */
+@media (max-width: 768px) {
+  .qr-code-box {
+      width: 100%;
+      padding: 15px;
+  }
+  
+  .qr-code-img {
+      width: 100%;
+      max-width: 250px;
+      margin-bottom: 20px;
+  }
+}
+
+
+.user-menu .dropdown-menu {
+  width: 250px;
+  padding: 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+.user-header {
+  background: #f5f5f5;
+  padding: 20px;
+  text-align: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.user-header img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.user-header p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.user-header small {
+  color: #888;
+  font-size: 0.85em;
+}
+
+.user-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.user-footer .btn {
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-size: 0.9em;
+}
+
+.navbar-custom-menu .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+}
+
+.navbar-custom-menu .dropdown-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}

@@ -1,0 +1,110 @@
+{% load static %}
+{% include "Administrateur/section/head.html" %}
+<body class="skin-blue">
+<div class="wrapper"> 
+    {% include "Administrateur/section/header.html" %}
+    {% include "Administrateur/section/menugauche.html" %}
+
+    <!-- Contenu -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Audit</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                <li><a href="#"><i class="fa fa-history"></i> Audit des accès</a></li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Historique des accès</h3>
+                        </div>
+                        
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fa fa-calendar"></i> Action</th>
+                                            <th><i class="fa fa-user"></i> Date et heure</th>
+                                            <th><i class="fas fa-pen"></i> Description</th>
+                                            <th><i class="fa fa-user"></i> Utilisateur</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for log in audit_logs %}
+                                        <tr>
+                                            <td>{{ log.action }}</td>
+                                            <td>{{ log.date|date:'d/m/Y H:i' }}</td>
+                                            <td>
+                                                {{ log.description }}
+                                            </td>
+                                            <td>
+                                                {{ log.get_utilisateur }}
+                                            </td>
+                                            <td>
+                                                {% if log.action == 'consultation' %}
+                                                    <span class="label label-primary">{{ log.get_action_display }}</span>
+                                                {% elif log.action == 'modification' %}
+                                                    <span class="label label-warning">{{ log.get_action_display }}</span>
+                                                {% elif log.action == 'partage' %}
+                                                    <span class="label label-success">{{ log.get_action_display }}</span>
+                                                {% else %}
+                                                    <span class="label label-default">{{ log.get_action_display }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <div class="alert alert-info">
+                                                    <i class="fa fa-info-circle"></i>
+                                                    Aucun accès enregistré pour le moment.
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination si nécessaire -->
+                            {% if logs.has_other_pages %}
+                            <div class="box-footer clearfix">
+                                <ul class="pagination pagination-sm no-margin pull-right">
+                                    {% if logs.has_previous %}
+                                        <li><a href="?page={{ logs.previous_page_number }}">&laquo;</a></li>
+                                    {% endif %}
+                                    
+                                    {% for num in logs.paginator.page_range %}
+                                        {% if logs.number == num %}
+                                            <li class="active"><a href="#">{{ num }}</a></li>
+                                        {% else %}
+                                            <li><a href="?page={{ num }}">{{ num }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if logs.has_next %}
+                                        <li><a href="?page={{ logs.next_page_number }}">&raquo;</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                            
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section>
+    </div>
+    <!-- End Contenu -->
+
+    {% include "Administrateur/section/footer.html" %}
+</div><!-- ./wrapper -->
+{% include "Administrateur/section/script.html" %}
+
+</body>
+</html>

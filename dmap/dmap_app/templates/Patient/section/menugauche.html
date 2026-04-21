@@ -1,0 +1,87 @@
+{% load static %}
+<aside class="main-sidebar" style="height: 120vh;">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        {% with user.image.url as photo %}
+          <img src="{% if photo %}{{ photo }}{% else %}{% static 'img/photo-indisponible.webp' %}{% endif %}" 
+            alt="Admin" class="rounded-circle" width="150">
+        {% endwith %}
+      </div>
+      <div class="pull-left info">
+        <p>{{full_name}} (Patient)</p>
+        <a href="#"><i class="fa fa-circle text-success"></i> En Ligne</a>
+      </div>
+    </div>
+
+    <!-- sidebar menu -->
+    <ul class="sidebar-menu">
+      <li class="header">MENU PATIENT</li>
+    
+      <li class="{% if request.path == '/patient/' %}active{% endif %}">
+        <a href="{% url 'patient' %}">
+          <i class="fa fa-home"></i> <span>Accueil</span>
+        </a>
+      </li>
+    
+      <li class="{% if request.path == '/profil/' %}active{% endif %}">
+        <a href="{% url 'profil' %}">
+          <i class="fa fa-user"></i> <span>Mon Profil</span>
+        </a>
+      </li>
+    
+      <li class="{% if request.path == '/examenmedical/' %}active{% endif %}">
+        <a href="{% url 'examenmedical' %}">
+          <i class="fa fa-folder-open"></i>
+          <span>Consulter Dossier Médical</span>
+          <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+          <li class="{% if request.path == '/examenmedical/' %}active{% endif %}"><a href="{% url 'examenmedical' %}"><i class="fa fa-flask"></i>Examens Médicaux</a></li>
+          <li class="{% if request.path == '/consultation/' %}active{% endif %}"><a href="{% url 'consultation' %}"><i class="fa fa-stethoscope"></i> Diagnostic Consultation</a></li>
+            <li class="{% if request.path == '/prescription/' %}active{% endif %}"><a href="{% url 'prescription' %}"><i class="fa fa-medkit"></i> Liste des Prescriptions</a></li>
+          <li class="{% if request.path == '/documentmedical/' %}active{% endif %}"><a href="{% url 'documentmedical' %}"><i class="fa fa-file-text"></i> Document Médical</a></li>
+          <li class="{% if request.path == '/info_medecin/' %}active{% endif %}"><a href="{% url 'info_medecin' %}"><i class="fa fa-file-text"></i> Informations Médicales</a></li>
+        </ul>
+      </li>
+    
+      <li class="{% if request.path == '/qrcode_view/' %}active{% endif %}">
+        <a href="{% url 'qrcode_view' %}">
+          <i class="fa fa-qrcode"></i> <span>Afficher Code QR</span>
+        </a>
+      </li>
+    
+      <li class="{% if request.path == '/demandecarte/' %}active{% endif %}">
+        <a href="{% url 'demandecarte' %}">
+          <i class="fa fa-id-card"></i> <span>Demande Carte Patient</span>
+        </a>
+      </li>
+    
+      <li class="{% if request.path == '/chatbot/' %}active{% endif %}">
+        <a href="{% url 'chatbot' %}">
+          <i class="fa fa-commenting"></i> <span>ChatBot</span>
+        </a>
+      </li>
+      <li class="{% if request.path == '/notification_patient/' %}active{% endif %}">
+        <a href="{% url 'notification_patient' %}">
+          <i class="fa fa-bell"></i> <span>Notification & Rappels</span>
+        </a>
+      </li>
+      <li class="{% if request.path == '/historique_rendez_vous/' %}active{% endif %}">
+        <a href="{% url 'historique_rendez_vous' %}">
+          <i class="fa fa-calendar"></i> <span>Historique des Rendez-Vous</span>
+        </a>
+      </li>
+    
+      <li class="{% if request.path == '/logout/' %}active{% endif %}">
+        <a href="javascript:void(0);" onclick="confirmLogout()">
+            <i class="fa fa-sign-out"></i> <span>Déconnexion</span>
+        </a>
+      </li>
+    </ul>
+    
+  </section>
+  <!-- /.sidebar -->
+</aside>

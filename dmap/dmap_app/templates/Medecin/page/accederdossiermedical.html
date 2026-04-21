@@ -1,0 +1,163 @@
+{% load static %}
+{% include "Medecin/section/head.html" %}
+<style>
+    /* QR Reader style */
+    #qr-reader {
+        animation: pulse 2s infinite;
+        border: 3px solid #007bff;
+        box-shadow: 0 0 15px rgba(0,123,255,0.6);
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 10px rgba(0,123,255,0.6); }
+        50% { box-shadow: 0 0 25px rgba(0,123,255,0.9); }
+        100% { box-shadow: 0 0 10px rgba(0,123,255,0.6); }
+    }
+
+    #qr-reader::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 4px;
+        width: 100%;
+        background: red;
+        animation: scanLine 2s infinite linear;
+        z-index: 10;
+    }
+
+    @keyframes scanLine {
+        0% { top: 0; }
+        50% { top: 100%; }
+        100% { top: 0; }
+    }
+
+    /* Résultat avec animation */
+    #qr-reader-results {
+        font-weight: bold;
+        font-size: 20px;
+        opacity: 0;
+        transition: opacity 0.6s ease-in-out;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    #qr-reader-results.visible {
+        opacity: 1;
+    }
+
+    /* Animation du check ✅ */
+    .success-check {
+        font-size: 50px;
+        color: green;
+        animation: zoomIn 0.4s ease-in-out forwards;
+    }
+
+    @keyframes zoomIn {
+        0% { transform: scale(0); opacity: 0; }
+        100% { transform: scale(1.2); opacity: 1; }
+    }
+</style>
+
+<body class="skin-blue">
+    <div class="wrapper"> 
+        {% include "Medecin/section/header.html" %}
+        {% include "Medecin/section/menugauche.html" %}
+
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>Accéder à un Dossier Médical</h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                    <li><a href="#"><i class="fa fa-folder-open"></i> Accéder à un Dossier Médical</a></li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Accéder à un Dossier Médical</h3>
+                            </div>
+                            <div class="box-body">
+                                <form method="POST" action="{% url 'acceder_dossier_via_code' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="identifiant">Identifiant du patient :</label>
+                                        <input type="text" class="form-control" id="identifiant" name="identifiant" placeholder="Entrez l'identifiant du patient" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-folder-open"></i> Accéder au Dossier
+                                    </button>
+                                </form>
+                                <br>
+                                <h4>Ou scanner le QR Code :</h4>
+                                <div id="qr-reader" style="width: 100%; max-width: 500px; margin: auto;"></div>
+                                <div id="qr-reader-results" class="mt-3 text-success"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        {% include "Medecin/section/footer.html" %}
+    </div>
+
+    <!-- Bip sonore -->
+    <audio id="beep-sound" src="{% static 'audio/beep.mp3' %}" preload="auto"></audio>
+
+    <!-- Lib QRCode -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+    <script>
+    function onScanSuccess(decodedText, decodedResult) {
+        const resultDiv = document.getElementById('qr-reader-results');
+        
+        // Bip sonore
+        const beep = document.getElementById("beep-sound");
+        if (beep) {
+            beep.currentTime = 0;
+            beep.play();
+        }
+
+        // Message + check ✅ animé
+        resultDiv.innerHTML = `
+            <div class="success-check">✅</div>
+            <div><strong>Redirection vers :</strong> ${decodedText}</div>
+        `;
+        resultDiv.classList.add("visible");
+
+        // Redirection après 1.2s
+        setTimeout(() => {
+            window.location.href = decodedText;
+        }, 1200);
+    }
+
+    function onScanFailure(error) {
+        console.warn("Échec du scan : ", error);
+        const resultDiv = document.getElementById('qr-reader-results');
+        resultDiv.innerHTML = "<strong>Erreur lors du scan. Veuillez réessayer.</strong>";
+        resultDiv.classList.add("visible");
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader", 
+            { 
+                fps: 10,
+                qrbox: { width: 250, height: 250 },
+                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+            },
+            false
+        );
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    });
+    </script>
+
+    {% include "Medecin/section/script.html" %}
+</body>
+</html>

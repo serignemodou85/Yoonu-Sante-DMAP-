@@ -1,0 +1,78 @@
+{% load static %}
+<aside class="main-sidebar">
+  <section class="sidebar">
+    <!-- Panneau utilisateur -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        {% if image %}
+            <img src="{{ image }}" alt="Admin" class="rounded-circle" width="150">
+        {% else %}
+            <img src="{% static 'img/photo-indisponible.webp' %}" alt="Admin par défaut" class="rounded-circle" width="150">
+        {% endif %}
+      </div>
+
+      <div class="pull-left info">
+        <p>{{ nom_complet }}</p>
+        <a href="#"><i class="fa fa-circle text-success"></i> En Ligne</a>
+      </div>
+    </div>
+
+    <!-- Menu -->
+    <ul class="sidebar-menu">
+      <li class="header">MENU ADMINISTRATEUR</li>
+
+      <li class="{% if request.resolver_match.url_name == 'super_admin_page' %}active{% endif %}">
+        <a href="{% url 'super_admin_page' %}">
+          <i class="fa fa-dashboard"></i> <span>Accueil</span>
+        </a>
+      </li>
+
+      <li class="{% if request.resolver_match.url_name == 'gerer_inscription' %}active{% endif %}">
+        <a href="{% url 'gerer_inscription' %}">
+          <i class="fa fa-university"></i> <span>Inscriptions Structures</span>
+        </a>
+      </li>
+
+      <li class="{% if request.resolver_match.url_name == 'liste_utilisateur' %}active{% endif %}">
+        <a href="{% url 'liste_utilisateur' %}">
+          <i class="fa fa-address-book"></i> <span>Liste Utilisateurs</span>
+        </a>
+      </li>
+
+      <li class="{% if request.resolver_match.url_name == 'ajout_admin' %}active{% endif %}">
+        <a href="{% url 'ajout_admin' %}">
+          <i class="fa fa-user-plus"></i> <span>Ajouter un Admin</span>
+        </a>
+      </li>
+
+      <li class="{% if request.resolver_match.url_name == 'listeDemandeCarte' %}active{% endif %}">
+        <a href="{% url 'listeDemandeCarte' %}">
+          <i class="fa fa-id-card"></i> <span>Liste Demandes de Carte</span>
+        </a>
+      </li>
+      <li class="{% if request.resolver_match.url_name == 'notification' %}active{% endif %}">
+        <a href="{% url 'notification' %}">
+          <i class="fa fa-bell"></i> <span>Notification</span>
+        </a>
+      </li>
+
+      <li class="{% if request.resolver_match.url_name == 'profil_admin' %}active{% endif %}">
+        <a href="{% url 'profil_admin' %}">
+          <i class="fa fa-user-circle"></i> <span>Profil</span>
+        </a>
+      </li>
+
+      <li class="{% if request.resolver_match.url_name == 'audit_acces_dossier_medical' %}active{% endif %}">
+        <a href="{% url 'audit_acces_dossier_medical' %}">
+          <i class="fa fa-file-text"></i> <span>Audit Accès Dossier Médical</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="javascript:void(0);" onclick="confirmLogout()">
+            <i class="fa fa-sign-out"></i> <span>Déconnexion</span>
+        </a>
+      </li>    
+    </ul>
+  </section>
+</aside>

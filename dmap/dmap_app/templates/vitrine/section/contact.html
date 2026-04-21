@@ -1,0 +1,102 @@
+<section id="contact" class="contact section">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Contactez-nous</h2>
+    <p>Nous sommes à votre disposition pour toute demande d’information, de partenariat ou d’assistance. N’hésitez pas à nous écrire !</p>
+  </div><!-- End Section Title -->
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <div class="row gy-4 mb-5">
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="icon-box">
+            <i class="bi bi-geo-alt"></i>
+          </div>
+          <h3>Notre adresse</h3>
+          <p>Liberte 6 Extension, Derriere immeuble ferdiand coly, Villa 2334</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card">
+          <div class="icon-box">
+            <i class="bi bi-telephone"></i>
+          </div>
+          <h3>Nous joindre</h3>
+          <p>Téléphone : +221 77 000 00 00<br>
+             Email : <a href="mailto:yoonusante2025@gmail.com">yoonusante2025@gmail.com</a></p>
+        </div>
+      </div>
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
+  <div class="info-card">
+    <div class="icon-box">
+      <i class="bi bi-share"></i>
+    </div>
+    <h3>Canaux rapides</h3>
+    <p>Contact direct :</p>
+    <div class="d-flex">
+      <a href="mailto:yoonusante2025@gmail.com" class="me-2" aria-label="Email"><i class="bi bi-envelope"></i></a>
+      <a href="tel:+221770000000" class="me-2" aria-label="Téléphone"><i class="bi bi-telephone"></i></a>
+    </div>
+  </div>
+</div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="form-wrapper" data-aos="fade-up" data-aos-delay="400">
+          <form action="{% url 'message_visiteur' %}" method="post">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-person"></i></span>
+                  <input type="text" name="nom" class="form-control" placeholder="Votre nom *" required="">
+                </div>
+              </div>
+              <div class="col-md-6 form-group">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                  <input type="email" class="form-control" name="email" placeholder="Votre adresse email *" required="">
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-6 form-group">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                  <input type="text" class="form-control" name="telephone" placeholder="Votre numéro de téléphone *" required="">
+                </div>
+              </div>
+              <div class="col-md-6 form-group">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-list"></i></span>
+                  <select name="type_utilisateur" class="form-control" required="">
+                    <option value="">Type de profil</option>
+                    <option value="Service 1">Medecin</option>
+                    <option value="Service 2">Structure de sante</option>
+                    <option value="Service 3">Patient</option>
+                    <option value="Service 4">Autre</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mt-3">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-chat-dots"></i></span>
+                <textarea class="form-control" name="message" rows="6" placeholder="Votre message *" required=""></textarea>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Envoyer le message</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

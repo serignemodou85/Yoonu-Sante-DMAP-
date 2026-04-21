@@ -1,0 +1,664 @@
+{% load static %}
+{% include "Medecin/section/head.html" %}
+<body class="skin-blue">
+<div class="wrapper"> 
+    {% include "Medecin/section/header.html" %}
+    {% include "Medecin/section/menugauche.html" %}
+
+    <!-- Contenu -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Dossier Médical du Patient</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                <li class="active"><i class="fa fa-folder"></i> Dossier Médical Patient</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Dossier Médical Patient</h3>
+                        </div>
+                        <div class="box-body">
+                          <div class="d-flex justify-content-between align-items-center" style="margin: 15px 0;">
+                            <div class="btn-group">
+                              <button class="btn btn-primary btn-filtre active" data-target="infos">
+                                <i class="fas fa-info-circle"></i> Infos
+                              </button>
+                              <button class="btn btn-secondary btn-filtre" data-target="consultation">
+                                <i class="fa fa-stethoscope"></i> Consultations
+                              </button>
+                              <button class="btn btn-secondary btn-filtre" data-target="prescription">
+                                <i class="fa fa-medkit"></i> Prescriptions
+                              </button>
+                              <button class="btn btn-secondary btn-filtre" data-target="examen">
+                                <i class="fa fa-flask"></i> Examens
+                              </button>
+                              <button class="btn btn-secondary btn-filtre" data-target="documents">
+                                <i class="fa fa-file-pdf"></i> Documents
+                              </button>
+                              <button class="btn btn-secondary btn-filtre" data-target="notes">
+                                <i class="fa fa-file-text"></i> Notes
+                              </button>
+                            </div>
+                          
+                            <!-- Bouton RDV à droite avec couleur sobre -->
+                            <a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addRendezVousModalPatient">
+                              <i class="fa fa-calendar"></i> Ajouter Rendez-vous 
+                            </a>
+                          </div>
+                          
+                        </div>
+                        <div class="row">
+                               <!-- INFOS -->
+                              <div class="table-section" id="section-infos">
+                                <div class="box box-info">
+                                  <div class="box-header with-border">
+                                    <h3 class="box-title">
+                                      <i class="fa fa-info-circle"></i> Informations du patient
+                                    </h3>
+                                  </div>
+                                  <div class="box-body">
+                                    <div class="row">
+                                      <!-- Photo -->
+                                      <div class="col-md-4 text-center">
+                                        <img src="{{ patient.image.url }}" alt="Photo du patient" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                                        <p class="mt-2"><strong>{{ patient.nom }} {{ patient.prenom }}</strong></p>
+                                      </div>
+
+                                      <!-- Infos -->
+                                      <div class="col-md-8">
+                                        <ul class="list-group">
+                                          <li class="list-group-item">
+                                            <i class="fa fa-user"></i> <strong>Nom:</strong> {{ patient.nom }}
+                                          </li>
+                                          <li class="list-group-item">
+                                            <i class="fa fa-user"></i> <strong>Prénom:</strong> {{ patient.prenom }}
+                                          </li>
+                                          <li class="list-group-item">
+                                            <i class="fa fa-calendar"></i> <strong>Date de naissance:</strong> {{ patient.date_naissance }}
+                                          </li>
+                                          <li class="list-group-item">
+                                            <i class="fa fa-phone"></i> <strong>Contact Urgent:</strong> {{ patient.contact_urgence }}
+                                          </li>
+                                          <li class="list-group-item">
+                                            <i class="fa fa-tint"></i> <strong>Groupe Sanguin:</strong> {{ patient.groupe_sanguin }}
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                                <!-- CONSULTATIONS -->
+                                <div class=" table-section" id="section-consultation" style="display: none;">
+                                    <div class="box box-info">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title"><i class="fa fa-stethoscope"></i> Consultations</h3>
+                                            <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#addConsultationModal">
+                                                <i class="fa fa-plus"></i> Ajouter
+                                            </button>
+                                        </div>
+                                        <div class="box-body">
+                                          <table id="tableConsultations" class="table table-bordered table-hover">
+                                            <thead>
+                                              <tr>
+                                                <th>Date</th>
+                                                <th>Motif</th>
+                                                <th>Consulter Par</th>
+                                                <th>Température</th>
+                                                <th>Taille</th>
+                                                <th>Poids</th>
+                                                <th>Résultat</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {% for consult in consultations %}
+                                                <tr>
+                                                  <td>{{ consult.date_consultation }}</td>
+                                                  <td>{{ consult.motif }}</td>
+                                                  <td>{{ consult.medecin.prenom }} {{ consult.medecin.nom }}</td>
+                                                  <td>{{ consult.temperature }}</td>
+                                                  <td>{{ consult.taille }}</td>
+                                                  <td>{{ consult.poids }}</td>
+                                                  <td>{{ consult.resultat|truncatewords:10 }}</td>
+                                                </tr>
+                                              {% endfor %}
+                                            </tbody>
+                                            </table>      
+                                            <div class="text-center">
+                                              <ul class="pagination">
+                                                {% if consultations.has_previous %}
+                                                  <li><a href="?consultation_page={{ consultations.previous_page_number }}&section=consultation">«</a></li>
+                                                {% endif %}
+                                            
+                                                {% for num in consultations.paginator.page_range %}
+                                                  <li class="{% if consultations.number == num %}active{% endif %}">
+                                                    <a href="?consultation_page={{ num }}&section=consultation">{{ num }}</a>
+                                                  </li>
+                                                {% endfor %}
+                                            
+                                                {% if consultations.has_next %}
+                                                  <li><a href="?consultation_page={{ consultations.next_page_number }}&section=consultation">»</a></li>
+                                                {% endif %}
+                                              </ul>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- PRESCRIPTIONS -->
+                                <div class="table-section" id="section-prescription" style="display: none;">
+                                  <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                      <h3 class="box-title"><i class="fa fa-medkit"></i> Prescriptions</h3>
+                                      <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#addPrescriptionModal">
+                                        <i class="fa fa-plus"></i> Ajouter
+                                      </button>
+                                    </div>
+                                    <div class="box-body">
+                                      <table id="tablePrescriptions" class="table table-bordered table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th>Date</th>
+                                            <th>Médicament</th>
+                                            <th>Durée</th>
+                                            <th>Posologie</th>
+                                            <th>Mode Administration</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {% for presc in prescriptions %}
+                                            <tr>
+                                              <td>{{ presc.created_at }}</td>
+                                              <td>{{ presc.medicament }}</td>
+                                              <td>{{ presc.duree }} jours</td>
+                                              <td>{{ presc.posologie }}</td>
+                                              <td>{{ presc.mode_administration }}</td>
+                                            </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                      </table>
+
+                                      <!-- Pagination Prescriptions -->
+                                      <div class="text-center">
+                                        <ul class="pagination">
+                                          {% if prescriptions.has_previous %}
+                                            <li><a href="?prescription_page={{ prescriptions.previous_page_number }}&section=prescription">«</a></li>
+                                          {% endif %}
+                                          {% for num in prescriptions.paginator.page_range %}
+                                            <li class="{% if prescriptions.number == num %}active{% endif %}">
+                                              <a href="?prescription_page={{ num }}&section=prescription">{{ num }}</a>
+                                            </li>
+                                          {% endfor %}
+                                          {% if prescriptions.has_next %}
+                                            <li><a href="?prescription_page={{ prescriptions.next_page_number }}&section=prescription">»</a></li>
+                                          {% endif %}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- EXAMENS -->
+                                <div class="table-section" id="section-examen" style="display: none;">
+                                  <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                      <h3 class="box-title"><i class="fa fa-flask"></i> Examens</h3>
+                                      <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#addExamenModal">
+                                        <i class="fa fa-plus"></i> Ajouter
+                                      </button>
+                                    </div>
+                                    <div class="box-body">
+                                      <table id="tableExamens" class="table table-bordered table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th>Date Examen</th>
+                                            <th>Type Examen</th>
+                                            <th>Résultat</th>
+                                            <th>Diagnostic</th>
+                                            <th>Lieu</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {% for exam in examens %}
+                                            <tr>
+                                              <td>{{ exam.date_examen }}</td>
+                                              <td>{{ exam.type_examen }}</td>
+                                              <td>{{ exam.resultat }}</td>
+                                              <td>{{ exam.diagnostic }}</td>
+                                              <td>{{ exam.lieu }}</td>
+                                            </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                      </table>
+
+                                      <!-- Pagination Examens -->
+                                      <div class="text-center">
+                                        <ul class="pagination">
+                                          {% if examens.has_previous %}
+                                            <li><a href="?examen_page={{ examens.previous_page_number }}&section=examen">«</a></li>
+                                          {% endif %}
+                                          {% for num in examens.paginator.page_range %}
+                                            <li class="{% if examens.number == num %}active{% endif %}">
+                                              <a href="?examen_page={{ num }}&section=examen">{{ num }}</a>
+                                            </li>
+                                          {% endfor %}
+                                          {% if examens.has_next %}
+                                            <li><a href="?examen_page={{ examens.next_page_number }}&section=examen">»</a></li>
+                                          {% endif %}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- DOCUMENTS -->
+                                <div class="table-section" id="section-documents" style="display: none;">
+                                  <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                      <h3 class="box-title"><i class="fa fa-file-alt"></i> Documents</h3>
+                                      <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#addDocumentModal">
+                                        <i class="fa fa-plus"></i> Ajouter
+                                      </button>
+                                    </div>
+                                    <div class="box-body">
+                                      <table id="tableExamens" class="table table-bordered table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th>Description</th>
+                                            <th>Date</th>
+                                            <th>Image</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {% for doc in documents %}
+                                            <tr>
+                                              <td>{{ doc.description }}</td>
+                                              <td>{{ doc.created_at }}</td>
+                                              <td><a href="{{ doc.image.url }}" target="_blank">Voir</a></td>
+                                            </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                      </table>
+
+                                      <!-- Pagination Examens -->
+                                      <div class="text-center">
+                                        <ul class="pagination">
+                                          {% if documents.has_previous %}
+                                            <li><a href="?document_page={{ documents.previous_page_number }}&section=documents">«</a></li>
+                                          {% endif %}
+                                          {% for num in documents.paginator.page_range %}
+                                            <li class="{% if examens.number == num %}active{% endif %}">
+                                              <a href="?examen_page={{ num }}&section=examen">{{ num }}</a>
+                                            </li>
+                                          {% endfor %}
+                                          {% if documents.has_next %}
+                                            <li><a href="?document_page={{ documents.next_page_number }}&section=documents">»</a></li>
+                                          {% endif %}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="table-section" id="section-notes" style="display: none;">
+                                  <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                      <h3 class="box-title"><i class="fa fa-file-text"></i> Notes</h3>
+                                      <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#addNoteModal">
+                                        <i class="fa fa-plus"></i> Ajouter
+                                      </button>
+                                    </div>
+                                    <div class="box-body">
+                                      <table id="tableExamens" class="table table-bordered table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th>Description</th>
+                                            <th>Date</th>
+                                            <th>Visibilité</th>
+                                            <th>Actions</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {% for note in notes %}
+                                            <tr>
+                                              <td>{{ note.description }}</td>
+                                              <td>{{ note.created_at }}</td>
+                                              <td>
+                                                {% if note.visible_par_patient %}
+                                                  Le patient peut voir cette note
+                                                {% else %}
+                                                  Le patient ne peut pas voir cette note
+                                                {% endif %}
+                                              </td>
+                                              <td>
+                                                {% if note.visible_par_patient %}
+                                                  <a href="{% url 'toggle_visibilite_note' note.id %}" class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-eye-slash"></i> Rendre invisible
+                                                  </a>
+                                                {% else %}
+                                                  <a href="{% url 'toggle_visibilite_note' note.id %}" class="btn btn-success btn-sm">
+                                                    <i class="fa fa-eye"></i> Rendre visible
+                                                  </a>
+                                                {% endif %}
+                                              </td>
+                                              
+                                            </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                      </table>
+
+                                      <!-- Pagination Examens -->
+                                      <div class="text-center">
+                                        <ul class="pagination">
+                                          {% if notes.has_previous %}
+                                            <li><a href="?note_page={{ notes.previous_page_number }}&section=notes">«</a></li>
+                                          {% endif %}
+                                          {% for num in notes.paginator.page_range %}
+                                            <li class="{% if examens.number == num %}active{% endif %}">
+                                              <a href="?examen_page={{ num }}&section=examen">{{ num }}</a>
+                                            </li>
+                                          {% endfor %}
+                                          {% if notes.has_next %}
+                                            <li><a href="?note_page={{ notes.next_page_number }}&section=notes">»</a></li>
+                                          {% endif %}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- /.content-wrapper -->
+
+    {% include "Medecin/section/footer.html" %}
+</div><!-- ./wrapper -->
+
+{% include "Medecin/section/script.html" %}
+
+<!-- MODALS -->
+
+
+<!-- MODAL AJOUT CONSULTATION -->
+<div class="modal fade" id="addConsultationModal" tabindex="-1" role="dialog" aria-labelledby="addConsultationModalLabel">
+    <div class="modal-dialog" role="document">
+      <form method="post" action="{% url 'ajout_consultation' %}">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header bg-info">
+            <h4 class="modal-title">Ajouter une Consultation</h4>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+          <input type="hidden" name="patient_id" value="{{ patient.id }}">
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" name="date_consultation" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Motif</label>
+              <textarea name="motif" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+              <label>Température</label>
+              <input type="text" name="temperature" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Taille</label>
+              <input type="text" name="taille" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Poids</label>
+              <input type="text" name="poids" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Résultat</label>
+              <textarea name="resultat" class="form-control"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+  
+  <!-- MODAL AJOUT PRESCRIPTION -->
+<div class="modal fade" id="addPrescriptionModal" tabindex="-1" role="dialog" aria-labelledby="addPrescriptionModalLabel">
+    <div class="modal-dialog" role="document">
+      <form method="post" action="{% url 'ajout_prescription' %}">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header bg-info">
+            <h4 class="modal-title">Ajouter une Prescription</h4>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+          <input type="hidden" name="patient_id" value="{{ patient.id }}">
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Medicament</label>
+              <textarea name="medicament" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+              <label>Duree</label>
+              <textarea name="duree" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+              <label>Posologie</label>
+              <textarea name="posologie" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+              <label>Mode Administration</label>
+              <textarea name="mode_admin" class="form-control" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+  
+<!-- MODAL AJOUT EXAMEN -->
+<div class="modal fade" id="addExamenModal" tabindex="-1" role="dialog" aria-labelledby="addExamenModalLabel">
+    <div class="modal-dialog" role="document">
+      <form method="post" action="{% url 'ajout_examen' %}">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header bg-info">
+            <h4 class="modal-title">Ajouter un Examen</h4>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+          <input type="hidden" name="patient_id" value="{{ patient.id }}">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="date_examen">Date de l'examen</label>
+              <input type="date" name="date_examen" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="type_examen">Type d'examen</label>
+              <input type="text" name="type_examen" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="resultat">Résultat</label>
+              <input type="text" name="resultat" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="diagnostic">Diagnostic</label>
+              <textarea name="diagnostic" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="lieu">Lieu</label>
+              <input type="text" name="lieu" class="form-control" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+
+<!-- MODAL AJOUT DOCUMENT -->
+<div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="addDocumentModalLabel">
+    <div class="modal-dialog" role="document">
+      <form method="post" action="{% url 'ajout_document' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header bg-info">
+            <h4 class="modal-title">Ajouter un Document</h4>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="patient_id" value="{{ patient.id }}">
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea name="description" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="image">Image</label>
+              <input type="file" name="image" class="form-control" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+          </div>
+        </div>
+      </form>
+    </div> <!-- cette fermeture manque -->
+  </div>
+ 
+<!-- MODAL AJOUT NOTE -->
+<div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel">
+    <div class="modal-dialog" role="document">
+      <form method="post" action="{% url 'ajout_note' %}">
+        {% csrf_token %}
+        <div class="modal-content">
+          <input type="hidden" name="patient_id" value="{{ patient.id }}">
+
+          <div class="modal-header bg-info">
+            <h4 class="modal-title">Ajouter une Note</h4>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea name="description" class="form-control" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+<!-- Modal Ajout Rendez-Vous -->
+<div class="modal fade" id="addRendezVousModalPatient" tabindex="-1" role="dialog" aria-labelledby="addRendezVousModalLabel">
+  <div class="modal-dialog" role="rdv">
+    <form method="post" action="{% url 'ajout_rendez_vous' %}">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h4 class="modal-title">Ajouter un Rendez-Vous</h4>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        <input type="hidden" name="patient_id" value="{{ patient.id }}">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="date_rendez_vous">Date du Rendez-Vous</label>
+            <input type="datetime-local" name="date_rendez_vous" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="type_rendez_vous">Type de Rendez-Vous</label>
+            <input type="text" name="type_rendez_vous" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" name="description" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Enregistrer</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+  
+  <!-- Scripts DataTables -->
+<script>
+  $(document).ready(function() {
+    $('#tableConsultations, #tablePrescriptions, #tableExamens').DataTable({
+      "language": {
+        "search": "Rechercher:",
+        "lengthMenu": "Afficher _MENU_ enregistrements",
+        "info": "Affichage de _START_ à _END_ sur _TOTAL_ enregistrements",
+        "paginate": {
+          "first": "Première",
+          "last": "Dernière",
+          "next": "Suivant",
+          "previous": "Précédent"
+        },
+        "emptyTable": "Aucune donnée disponible"
+      }
+    });
+  });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+      // Gestion des boutons filtres
+      $(".btn-filtre").click(function(){
+          var target = $(this).data("target");
+          $(".btn-filtre").removeClass("btn-primary active").addClass("btn-secondary");
+          $(this).removeClass("btn-secondary").addClass("btn-primary active");
+          $(".table-section").hide();
+          $("#section-" + target).fadeIn();
+
+          // Met à jour l'URL sans recharger la page
+          const url = new URL(window.location);
+          url.searchParams.set("section", target);
+          history.replaceState(null, "", url);
+      });
+
+      // Lecture du paramètre ?section=... à l'arrivée sur la page
+      const urlParams = new URLSearchParams(window.location.search);
+      const section = urlParams.get("section");
+
+      if(section){
+          $(".table-section").hide();
+          $("#section-" + section).fadeIn();
+
+          $(".btn-filtre").removeClass("btn-primary active").addClass("btn-secondary");
+          $('.btn-filtre[data-target="' + section + '"]').removeClass("btn-secondary").addClass("btn-primary active");
+
+          $("html, body").animate({
+            scrollTop: $("#section-" + section).offset().top
+        }, 500);
+      }
+  });
+</script>
+
+
+
+</body>
+</html>

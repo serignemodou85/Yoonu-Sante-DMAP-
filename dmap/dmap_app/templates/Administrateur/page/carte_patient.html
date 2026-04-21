@@ -1,0 +1,156 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte Patient</title>
+    <style type="text/css">
+        @page {
+            size: 80mm 50mm;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+        }
+        .carte-container {
+            width: 80mm;
+            height: 50mm;
+            page-break-inside: avoid;
+        }
+        .carte-patient {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border-radius: 3mm;
+            box-shadow: 0 1mm 2mm rgba(0, 0, 0, 0.1);
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+        .photo-section {
+            width: 25mm;
+            background-color: #e9f5ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2mm;
+        }
+        .photo-patient {
+            width: 20mm;
+            height: 20mm;
+            border-radius: 50%;
+            background-color: #ccc;
+            overflow: hidden;
+            margin-top: 8mm;
+        }
+        .photo-patient img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .info-section {
+            flex: 1;
+            padding: 2mm 3mm;
+            position: relative;
+        }
+        .header {
+            background-color: #2a5885;
+            color: white;
+            padding: 1.5mm;
+            text-align: center;
+            font-size: 3.2mm;
+            font-weight: bold;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        /* ✅ Nouveau conteneur flex pour aligner info + QR */
+        .info-qr-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 4mm;
+            margin-top: 6mm;
+        }
+
+        .patient-info {
+            flex: 1;
+        }
+        .patient-info h2 {
+            margin: 0 0 1mm 0;
+            color: #2a5885;
+            font-size: 4mm;
+        }
+        .patient-info p {
+            margin: 0;
+            line-height: 1.1; /* ou 1 si tu veux plus compact */
+        }
+        
+
+        .qr-code {
+            bottom: 25px;
+            width: 10mm;
+            height: 10mm;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 2px;
+            background: white;
+            margin-left: 60px;
+        }
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .error-qr {
+            color: red;
+            font-size: 2.5mm;
+            text-align: center;
+            padding: 1mm;
+        }
+    </style>
+</head>
+<body>
+    <div class="carte-container">
+        <div class="carte-patient">
+            <div class="header">CARTE PATIENT - DMAP</div>
+
+            <div class="photo-patient">
+                {% if user.image %}
+                    <img src="{{ user.image.url }}" alt="Photo Patient">
+                {% else %}
+                    <img src="{% static 'img/default-user.png' %}" alt="Photo par défaut">
+                {% endif %}
+            </div>
+                       
+            <div class="info-section">
+                <div class="info-qr-container"> 
+                    <div class="patient-info">
+                        <p><strong>Nom:</strong>{{ demande.patient.nom|upper }}</p>
+                        <p><strong>Prénom:</strong> {{ demande.patient.prenom }}</p>
+                        <p><strong>Sexe:</strong> {{ demande.patient.get_sexe_display }}</p>
+                        <p><strong>Né(e) le:</strong> {{ demande.patient.date_naissance|date:"d/m/Y" }}</p>
+                        <p><strong>Émise le:</strong> <span>{{ date_emission }}</span></p>
+                    </div>
+
+                    <div class="qr-code">
+                        {% if demande.qr_code_image %}
+                            <img src="{{ demande.qr_code_image.path }}" alt="QR Code">
+                        {% else %}
+                            <span class="error-qr">ERREUR:<br>QR Code manquant</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

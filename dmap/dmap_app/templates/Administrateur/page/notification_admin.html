@@ -1,0 +1,89 @@
+{% load static %}
+{% include "Administrateur/section/head.html" %}
+<body class="skin-blue">
+<div class="wrapper"> 
+    {% include "Administrateur/section1/header.html" %}
+    {% include "Administrateur/section1/menugauche.html" %}
+
+    <!-- Contenu -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Liste des Notifications</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                <li><a href="#"><i class="fa fa-users"></i> Liste des Notifications</a></li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Liste des Notifications</h3>
+                        </div>
+                         
+                        {% if messages %}
+                        <script>
+                            {% for message in messages %}
+                            Swal.fire({
+                                icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% else %}info{% endif %}",
+                                title: "{{ message|escapejs }}",
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                            {% endfor %}
+                        </script>
+                        {% endif %}
+
+                        <div class="box-body">
+                            <table class="table table-bordered table-striped " >
+                                <thead>
+                                    <tr>
+                                        <th>Type Notification</th>
+                                        <th>Description</th>
+                                        <th>Date Reception</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for notification in notifications %}
+                                        <tr>  
+                                            <td>{{ notification.type_notification}}</td>
+                                            <td>{{ notification.description }}</td>
+                                            <td>{{ notification.created_at|date:"d/m/Y H:i" }}</td>                                            
+                                            <td> 
+                                                <!-- Formulaire de refus -->
+                                                <form method="post" action="" style="display:inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="refuser">
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Refuser">
+                                                        <i class="fas fa-times-circle"></i> Supprimer
+                                                    </button>
+                                                </form>
+                                            </td>
+                                                                                           
+                                                                                        </tr>
+                                    {% empty %}
+                                        <tr><td colspan="8" class="text-center">Aucune structure enregistrée</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </section>
+    </div>
+    <!-- End Contenu -->
+
+    <!-- JS de filtrage -->
+
+    {% include "Administrateur/section1/footer.html" %}
+</div><!-- ./wrapper -->
+{% include "Administrateur/section/script.html" %}
+<script src="{% static 'admin/js/message1.js' %}" type="text/javascript"></script>
+
+
+</body>
+</html>

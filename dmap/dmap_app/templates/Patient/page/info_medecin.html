@@ -1,0 +1,75 @@
+{% load static %}
+{% include "Patient/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+        {% include "Patient/section/header.html" %}
+        {% include "Patient/section/menugauche.html" %}
+
+        <!-- Contenu -->
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>Informations Médicales</h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-home"></i> Accueil</a></li>
+                    <li class="active"><i class="fa fa-file-pdf-o"></i> Informations Médicales</li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <!-- Titre -->
+                            <div class="box-header">
+                                <h3 class="box-title">Liste des informations médicales</h3>
+                            </div>
+                            <!-- Tableau -->
+                            <div class="box-body">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Description</th>
+                                            <th>Date de création</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for info in info_medecin %}
+                                            <tr>
+                                                <td>{{ info.description }}</td>
+                                                <td>{{ info.created_at }}</td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td colspan="4" class="text-center text-danger">Aucune information médicale trouvée</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="pagination">
+                                    <span class="step-links">
+                                        {% if info_medecin.has_previous %}
+                                            <a href="?page=1">&laquo; première</a>
+                                            <a href="?page={{ info_medecin.previous_page_number }}">précédente</a>
+                                        {% endif %}
+                                        <span class="current">
+                                            Page {{ info_medecin.number }} sur {{ info_medecin.paginator.num_pages }}.
+                                        </span>
+                                        {% if info_medecin.has_next %}
+                                            <a href="?page={{ info_medecin.next_page_number }}">suivante</a>
+                                            <a href="?page={{ info_medecin.paginator.num_pages }}">&raquo; dernière</a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </section>
+        </div>
+
+        {% include "Patient/section/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Patient/section/script.html" %}
+</body>
+</html>

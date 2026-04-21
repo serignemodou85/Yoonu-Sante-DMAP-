@@ -1,0 +1,94 @@
+{% load static %}
+{% include "Structure/section/head.html" %}
+<body class="skin-blue">
+    <div class="wrapper"> 
+      {% include "Structure/section/header.html" %}
+      {% include "Structure/section/menugauche.html" %}
+
+      <!-- Contenue -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Accueil
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>Acceuil</a></li>
+          </ol>
+        </section>
+        <section class="content">
+          <div class="row">
+            <!-- Nombre de Médecins -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3>{{ nombre_medecins }}</h3>
+                  <p>Médecins</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-user-md"></i> <!-- Icône médecin -->
+                </div>
+              </div>
+            </div>
+                      
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>{{ nombre_alerte_sanitaire }}</h3>
+                  <p>Demandes de sang</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-tint"></i> <!-- Goutte de sang -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Consultations -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-light-blue">
+                <div class="inner">
+                  <h3>{{ consultations_structure }}</h3>
+                  <p>Consultations</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-stethoscope"></i> <!-- Icône stéthoscope -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Prescriptions -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-teal">
+                <div class="inner">
+                  <h3>{{ prescriptions_structure }}</h3>
+                  <p>Prescriptions</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-file-text"></i> <!-- Icône fiche médicale (ou fa-file-text pour fallback) -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Examens -->
+            <div class="col-lg-4 col-xs-12">
+              <div class="small-box bg-orange">
+                <div class="inner">
+                  <h3>{{ examens_structure }}</h3>
+                  <p>Examens</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-flask"></i> <!-- Icône examen/labo -->
+                </div>
+              </div>
+          </div>            
+        </section>
+
+      </div>
+      <!--End Contenue -->
+
+      {% include "Structure/section/footer.html" %}
+    </div><!-- ./wrapper -->
+    {% include "Structure/section/script.html" %}
+
+  </body>
+</html>
