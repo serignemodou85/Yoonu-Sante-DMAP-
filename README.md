@@ -123,23 +123,6 @@ Accède à l'admin Django sur: `http://localhost:8000/admin`
 ✅ Alertes sanitaires (don de sang)  
 ✅ Audit des accès aux dossiers  
 
----
-
-## ⚠️ À Faire Avant Production
-
-- [ ] Générer une nouvelle `SECRET_KEY` robuste
-- [ ] Configurer un mot de passe MySQL fort
-- [ ] Mettre en place SSL/HTTPS
-- [ ] Configurer un système de cache (Redis)
-- [ ] Implémenter les tests unitaires
-- [ ] Tester avec une vraie instance Ollama
-- [ ] Configurer la sauvegarde des bases de données
-- [ ] Mettre en place le monitoring
-- [ ] Documenter les API endpoints
-- [ ] Implémenter la pagination complète
-
----
-
 ## 🤝 Support
 
 Pour les questions ou issues, créer un issue ou contacter l'équipe de développement.
